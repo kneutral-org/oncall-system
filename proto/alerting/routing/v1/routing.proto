@@ -1,0 +1,882 @@
+// Alert Routing System - Protocol Buffer Definitions
+// Comprehensive routing system for ISP and Datacenter operations
+
+syntax = "proto3";
+
+package alerting.routing.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/field_mask.proto";
+
+option go_package = "github.com/kneutral-org/alerting-system/pkg/proto/routing/v1;routingv1";
+
+// =============================================================================
+// ROUTING RULES
+// =============================================================================
+
+// RoutingRule defines how alerts are routed to notification targets
+message RoutingRule {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+
+  // Ordering - lower priority values are evaluated first
+  int32 priority = 4;
+
+  // Rule is active and will be evaluated
+  bool enabled = 5;
+
+  // Conditions that must ALL match (AND logic)
+  repeated RoutingCondition conditions = 6;
+
+  // Actions to execute when conditions match
+  repeated RoutingAction actions = 7;
+
+  // If true, stop evaluating subsequent rules after this one matches
+  bool terminal = 8;
+
+  // Time-based conditions (optional)
+  TimeCondition time_condition = 9;
+
+  // Metadata for audit trail
+  string created_by = 10;
+  google.protobuf.Timestamp created_at = 11;
+  string updated_by = 12;
+  google.protobuf.Timestamp updated_at = 13;
+
+  // Tags for organization
+  repeated string tags = 14;
+}
+
+// RoutingCondition defines a single match condition
+message RoutingCondition {
+  // Type of condition
+  ConditionType type = 1;
+
+  // Field to match against
+  string field = 2;
+
+  // Operator for comparison
+  ConditionOperator operator = 3;
+
+  // Value(s) to compare - use appropriate field based on operator
+  string string_value = 4;
+  repeated string string_list = 5;
+  int64 int_value = 6;
+  bool bool_value = 7;
+  string regex_pattern = 8;
+
+  // For CEL expressions (advanced)
+  string cel_expression = 9;
+}
+
+enum ConditionType {
+  CONDITION_TYPE_UNSPECIFIED = 0;
+
+  // Label matching
+  CONDITION_TYPE_LABEL = 1;
+
+  // Annotation matching
+  CONDITION_TYPE_ANNOTATION = 2;
+
+  // Severity level
+  CONDITION_TYPE_SEVERITY = 3;
+
+  // Alert source (prometheus, grafana, etc.)
+  CONDITION_TYPE_SOURCE = 4;
+
+  // Service/integration key
+  CONDITION_TYPE_SERVICE = 5;
+
+  // ISP/DC specific
+  CONDITION_TYPE_SITE = 6;
+  CONDITION_TYPE_POP = 7;
+  CONDITION_TYPE_CUSTOMER_TIER = 8;
+  CONDITION_TYPE_EQUIPMENT_TYPE = 9;
+  CONDITION_TYPE_CARRIER = 10;
+
+  // Advanced CEL expression
+  CONDITION_TYPE_CEL = 11;
+}
+
+enum ConditionOperator {
+  CONDITION_OPERATOR_UNSPECIFIED = 0;
+  CONDITION_OPERATOR_EQUALS = 1;
+  CONDITION_OPERATOR_NOT_EQUALS = 2;
+  CONDITION_OPERATOR_CONTAINS = 3;
+  CONDITION_OPERATOR_NOT_CONTAINS = 4;
+  CONDITION_OPERATOR_STARTS_WITH = 5;
+  CONDITION_OPERATOR_ENDS_WITH = 6;
+  CONDITION_OPERATOR_REGEX = 7;
+  CONDITION_OPERATOR_IN = 8;
+  CONDITION_OPERATOR_NOT_IN = 9;
+  CONDITION_OPERATOR_EXISTS = 10;
+  CONDITION_OPERATOR_NOT_EXISTS = 11;
+  CONDITION_OPERATOR_GREATER_THAN = 12;
+  CONDITION_OPERATOR_LESS_THAN = 13;
+}
+
+// RoutingAction defines what to do when a rule matches
+message RoutingAction {
+  ActionType type = 1;
+
+  // Action-specific configuration (use appropriate field based on type)
+  NotifyTeamAction notify_team = 2;
+  NotifyChannelAction notify_channel = 3;
+  NotifyUserAction notify_user = 4;
+  NotifyOnCallAction notify_oncall = 5;
+  NotifyWebhookAction notify_webhook = 6;
+  SuppressAction suppress = 7;
+  AggregateAction aggregate = 8;
+  EscalateAction escalate = 9;
+  CreateTicketAction create_ticket = 10;
+  SetLabelAction set_label = 11;
+}
+
+enum ActionType {
+  ACTION_TYPE_UNSPECIFIED = 0;
+  ACTION_TYPE_NOTIFY_TEAM = 1;
+  ACTION_TYPE_NOTIFY_CHANNEL = 2;
+  ACTION_TYPE_NOTIFY_USER = 3;
+  ACTION_TYPE_NOTIFY_ONCALL = 4;
+  ACTION_TYPE_NOTIFY_WEBHOOK = 5;
+  ACTION_TYPE_SUPPRESS = 6;
+  ACTION_TYPE_AGGREGATE = 7;
+  ACTION_TYPE_ESCALATE = 8;
+  ACTION_TYPE_CREATE_TICKET = 9;
+  ACTION_TYPE_SET_LABEL = 10;
+}
+
+// =============================================================================
+// ACTION DETAILS
+// =============================================================================
+
+// NotifyTeamAction - sends to all team members or subset
+message NotifyTeamAction {
+  string team_id = 1;
+
+  // Who in the team to notify
+  TeamNotifyScope scope = 2;
+
+  // Template to use
+  string template_id = 3;
+}
+
+enum TeamNotifyScope {
+  TEAM_NOTIFY_SCOPE_UNSPECIFIED = 0;
+  TEAM_NOTIFY_SCOPE_ALL = 1;           // All team members
+  TEAM_NOTIFY_SCOPE_ONCALL = 2;        // Only current on-call
+  TEAM_NOTIFY_SCOPE_ONCALL_PRIMARY = 3; // Only primary on-call
+  TEAM_NOTIFY_SCOPE_MANAGERS = 4;       // Only team managers
+}
+
+// NotifyChannelAction - direct channel notification (Simple Mode)
+message NotifyChannelAction {
+  NotificationTarget target = 1;
+  string template_id = 2;
+}
+
+// NotifyUserAction - direct user notification
+message NotifyUserAction {
+  string user_id = 1;
+  string template_id = 2;
+
+  // Override user's preferred channel
+  ChannelType channel_override = 3;
+}
+
+// NotifyOnCallAction - notify whoever is on-call for a schedule
+message NotifyOnCallAction {
+  string schedule_id = 1;
+  string template_id = 2;
+
+  // Notify primary, secondary, or both
+  OnCallLevel level = 3;
+}
+
+enum OnCallLevel {
+  ONCALL_LEVEL_UNSPECIFIED = 0;
+  ONCALL_LEVEL_PRIMARY = 1;
+  ONCALL_LEVEL_SECONDARY = 2;
+  ONCALL_LEVEL_BOTH = 3;
+}
+
+// NotifyWebhookAction - send to external webhook
+message NotifyWebhookAction {
+  string webhook_url = 1;
+
+  // HTTP method (POST default)
+  string method = 2;
+
+  // Custom headers
+  map<string, string> headers = 3;
+
+  // Template for payload transformation
+  string template_id = 4;
+}
+
+// SuppressAction - suppress alert notifications
+message SuppressAction {
+  // Reason for suppression (audit)
+  string reason = 1;
+
+  // Duration to suppress
+  google.protobuf.Duration duration = 2;
+
+  // Create suppression record
+  bool log_suppression = 3;
+}
+
+// AggregateAction - group similar alerts
+message AggregateAction {
+  // Field to group by
+  repeated string group_by = 1;
+
+  // Wait time before sending aggregated notification
+  google.protobuf.Duration window = 2;
+
+  // Max alerts to aggregate before forcing send
+  int32 max_alerts = 3;
+
+  // Template for aggregated notification
+  string template_id = 4;
+
+  // Where to send aggregated alert
+  NotificationTarget target = 5;
+}
+
+// EscalateAction - trigger escalation policy
+message EscalateAction {
+  string escalation_policy_id = 1;
+
+  // Override starting step
+  int32 start_at_step = 2;
+
+  // Skip wait times (immediate escalation)
+  bool urgent = 3;
+}
+
+// CreateTicketAction - create external ticket
+message CreateTicketAction {
+  string provider_id = 1; // salesforce, jira, servicenow
+  string project_key = 2;
+  string ticket_type = 3;
+
+  // Template for ticket description
+  string template_id = 4;
+
+  // Additional ticket fields
+  map<string, string> fields = 5;
+}
+
+// SetLabelAction - add/modify alert labels
+message SetLabelAction {
+  map<string, string> labels = 1;
+  bool overwrite_existing = 2;
+}
+
+// =============================================================================
+// TIME CONDITIONS
+// =============================================================================
+
+// TimeCondition for time-based routing
+message TimeCondition {
+  // Timezone for evaluation
+  string timezone = 1;
+
+  // Time windows when rule is active
+  repeated TimeWindow windows = 2;
+}
+
+message TimeWindow {
+  // Days of week (0 = Sunday, 6 = Saturday)
+  repeated int32 days_of_week = 1;
+
+  // Start time (HH:MM)
+  string start_time = 2;
+
+  // End time (HH:MM)
+  string end_time = 3;
+
+  // Invert - rule active OUTSIDE this window
+  bool invert = 4;
+}
+
+// =============================================================================
+// NOTIFICATION TARGETS
+// =============================================================================
+
+// NotificationTarget represents where to send notifications
+message NotificationTarget {
+  ChannelType channel = 1;
+
+  // Channel-specific target configuration (use appropriate field based on channel)
+  SlackTarget slack = 2;
+  TeamsTarget teams = 3;
+  EmailTarget email = 4;
+  SMSTarget sms = 5;
+  WebhookTarget webhook = 6;
+  PagerTarget pager = 7;
+}
+
+enum ChannelType {
+  CHANNEL_TYPE_UNSPECIFIED = 0;
+  CHANNEL_TYPE_SLACK = 1;
+  CHANNEL_TYPE_TEAMS = 2;
+  CHANNEL_TYPE_EMAIL = 3;
+  CHANNEL_TYPE_SMS = 4;
+  CHANNEL_TYPE_VOICE = 5;
+  CHANNEL_TYPE_WEBHOOK = 6;
+  CHANNEL_TYPE_PAGER = 7;
+  CHANNEL_TYPE_PUSH = 8;
+}
+
+message SlackTarget {
+  // Channel ID (preferred) or channel name
+  string channel_id = 1;
+  string channel_name = 2;
+
+  // Workspace ID for multi-workspace setups
+  string workspace_id = 3;
+}
+
+message TeamsTarget {
+  string channel_id = 1;
+  string team_id = 2;
+
+  // Webhook URL for incoming webhook integration
+  string webhook_url = 3;
+}
+
+message EmailTarget {
+  // Email addresses
+  repeated string addresses = 1;
+
+  // Distribution list name
+  string distribution_list = 2;
+}
+
+message SMSTarget {
+  repeated string phone_numbers = 1;
+}
+
+message WebhookTarget {
+  string url = 1;
+  string method = 2;
+  map<string, string> headers = 3;
+}
+
+message PagerTarget {
+  string service_key = 1;
+}
+
+// =============================================================================
+// TEAM MANAGEMENT
+// =============================================================================
+
+// Team represents a group of users with shared on-call responsibilities
+message Team {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+
+  // Team members
+  repeated TeamMember members = 4;
+
+  // On-call schedules for this team
+  repeated string schedule_ids = 5;
+
+  // Default escalation policy
+  string default_escalation_policy_id = 6;
+
+  // Default notification channel for team alerts
+  NotificationTarget default_channel = 7;
+
+  // Team managers (can edit team config)
+  repeated string manager_user_ids = 8;
+
+  // ISP/DC specific
+  repeated string assigned_sites = 9;
+  repeated string assigned_pops = 10;
+
+  // Metadata
+  map<string, string> metadata = 11;
+  google.protobuf.Timestamp created_at = 12;
+  google.protobuf.Timestamp updated_at = 13;
+}
+
+message TeamMember {
+  string user_id = 1;
+  TeamRole role = 2;
+
+  // Member-specific notification preferences
+  NotificationPreferences preferences = 3;
+
+  google.protobuf.Timestamp joined_at = 4;
+}
+
+enum TeamRole {
+  TEAM_ROLE_UNSPECIFIED = 0;
+  TEAM_ROLE_MEMBER = 1;
+  TEAM_ROLE_LEAD = 2;
+  TEAM_ROLE_MANAGER = 3;
+}
+
+message NotificationPreferences {
+  // Preferred channels in order
+  repeated ChannelType preferred_channels = 1;
+
+  // Quiet hours (do not disturb)
+  repeated TimeWindow quiet_hours = 2;
+
+  // Escalation delay override
+  google.protobuf.Duration escalation_delay = 3;
+}
+
+// =============================================================================
+// SCHEDULES & SHIFTS
+// =============================================================================
+
+// Schedule defines on-call rotation for a team
+message Schedule {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+
+  // Owning team
+  string team_id = 4;
+
+  // Timezone for schedule interpretation
+  string timezone = 5;
+
+  // Rotation layers (can have multiple overlapping)
+  repeated Rotation rotations = 6;
+
+  // Manual overrides
+  repeated ScheduleOverride overrides = 7;
+
+  // Handoff configuration
+  HandoffConfig handoff = 8;
+
+  // Metadata
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
+}
+
+// Rotation defines a repeating on-call pattern
+message Rotation {
+  string id = 1;
+  string name = 2;
+
+  // Rotation type
+  RotationType type = 3;
+
+  // Members in rotation order
+  repeated RotationMember members = 4;
+
+  // When rotation starts
+  google.protobuf.Timestamp start_time = 5;
+
+  // Shift configuration
+  ShiftConfig shift_config = 6;
+
+  // Restrictions (only active during certain times)
+  repeated TimeWindow restrictions = 7;
+
+  // Layer priority (higher = takes precedence)
+  int32 layer = 8;
+}
+
+enum RotationType {
+  ROTATION_TYPE_UNSPECIFIED = 0;
+  ROTATION_TYPE_DAILY = 1;
+  ROTATION_TYPE_WEEKLY = 2;
+  ROTATION_TYPE_BIWEEKLY = 3;
+  ROTATION_TYPE_CUSTOM = 4;
+}
+
+message RotationMember {
+  string user_id = 1;
+  int32 position = 2; // Order in rotation
+}
+
+message ShiftConfig {
+  // Shift length
+  google.protobuf.Duration shift_length = 1;
+
+  // Handoff time (e.g., "09:00")
+  string handoff_time = 2;
+
+  // Days for handoff (empty = every day matching shift_length)
+  repeated int32 handoff_days = 3;
+}
+
+// ScheduleOverride for manual schedule changes
+message ScheduleOverride {
+  string id = 1;
+
+  // User taking over
+  string user_id = 2;
+
+  // Override period
+  google.protobuf.Timestamp start_time = 3;
+  google.protobuf.Timestamp end_time = 4;
+
+  // Reason for override
+  string reason = 5;
+
+  // Who created the override
+  string created_by = 6;
+  google.protobuf.Timestamp created_at = 7;
+}
+
+// Shift represents an actual on-call shift instance
+message Shift {
+  string id = 1;
+  string schedule_id = 2;
+  string rotation_id = 3;
+
+  // User on-call during this shift
+  string user_id = 4;
+
+  // Shift timing
+  google.protobuf.Timestamp start_time = 5;
+  google.protobuf.Timestamp end_time = 6;
+
+  // Type of shift
+  ShiftType type = 7;
+
+  // For secondary/backup
+  int32 oncall_level = 8; // 1 = primary, 2 = secondary, etc.
+}
+
+enum ShiftType {
+  SHIFT_TYPE_UNSPECIFIED = 0;
+  SHIFT_TYPE_REGULAR = 1;
+  SHIFT_TYPE_OVERRIDE = 2;
+  SHIFT_TYPE_SWAP = 3;
+}
+
+// HandoffConfig for shift transitions
+message HandoffConfig {
+  // Minutes before handoff to notify outgoing
+  int32 outgoing_reminder_minutes = 1;
+
+  // Minutes before handoff to notify incoming
+  int32 incoming_reminder_minutes = 2;
+
+  // Template for handoff notifications
+  string template_id = 3;
+
+  // Channel for handoff notifications
+  NotificationTarget handoff_channel = 4;
+
+  // Require acknowledgment from incoming
+  bool require_ack = 5;
+
+  // Auto-escalate if no ack within N minutes
+  int32 escalate_if_no_ack_minutes = 6;
+}
+
+// =============================================================================
+// ISP/DATACENTER SPECIFIC
+// =============================================================================
+
+// Site represents a physical location (datacenter, POP)
+message Site {
+  string id = 1;
+  string name = 2;
+  string code = 3; // e.g., "IAD1", "SJC2"
+
+  SiteType type = 4;
+
+  // Geographic info
+  string region = 5;
+  string country = 6;
+  string city = 7;
+
+  // Assigned team
+  string primary_team_id = 8;
+  string secondary_team_id = 9;
+
+  // Escalation policy for this site
+  string escalation_policy_id = 10;
+
+  // Tier for prioritization
+  int32 tier = 11; // 1 = critical, 2 = important, 3 = standard
+
+  // Time zone
+  string timezone = 12;
+
+  // Business hours
+  repeated TimeWindow business_hours = 13;
+
+  // Metadata
+  map<string, string> metadata = 14;
+  google.protobuf.Timestamp created_at = 15;
+  google.protobuf.Timestamp updated_at = 16;
+}
+
+enum SiteType {
+  SITE_TYPE_UNSPECIFIED = 0;
+  SITE_TYPE_DATACENTER = 1;
+  SITE_TYPE_POP = 2;
+  SITE_TYPE_COLOCATION = 3;
+  SITE_TYPE_EDGE = 4;
+  SITE_TYPE_OFFICE = 5;
+}
+
+// CustomerTier for prioritization
+message CustomerTier {
+  string id = 1;
+  string name = 2; // e.g., "Enterprise", "Premium", "Standard"
+
+  // Tier level (1 = highest priority)
+  int32 level = 3;
+
+  // SLA response times
+  google.protobuf.Duration critical_response = 4;
+  google.protobuf.Duration high_response = 5;
+  google.protobuf.Duration medium_response = 6;
+
+  // Escalation multiplier (1.0 = normal, 0.5 = 2x faster)
+  float escalation_multiplier = 7;
+
+  // Dedicated team
+  string dedicated_team_id = 8;
+
+  // Metadata
+  map<string, string> metadata = 9;
+}
+
+// EquipmentType for equipment-based routing
+message EquipmentType {
+  string id = 1;
+  string name = 2; // e.g., "Core Router", "Edge Switch", "Firewall"
+  string category = 3; // e.g., "Network", "Compute", "Storage"
+
+  // Severity boost for this equipment type
+  int32 severity_boost = 4;
+
+  // Required team capabilities
+  repeated string required_capabilities = 5;
+
+  // Default escalation policy
+  string escalation_policy_id = 6;
+}
+
+// CarrierConfig for BGP/carrier-specific routing
+message CarrierConfig {
+  string id = 1;
+  string name = 2; // e.g., "Level3", "Cogent", "HE"
+  string asn = 3;
+
+  // NOC contact info
+  string noc_email = 4;
+  string noc_phone = 5;
+  string noc_portal_url = 6;
+
+  // Internal team responsible
+  string team_id = 7;
+
+  // Auto-create ticket on BGP alerts
+  bool auto_ticket = 8;
+  string ticket_provider_id = 9;
+}
+
+// MaintenanceWindow for planned maintenance
+message MaintenanceWindow {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+
+  // Maintenance period
+  google.protobuf.Timestamp start_time = 4;
+  google.protobuf.Timestamp end_time = 5;
+
+  // What's affected
+  repeated string affected_sites = 6;
+  repeated string affected_services = 7;
+  repeated string affected_labels = 8; // label matchers
+
+  // Action during maintenance
+  MaintenanceAction action = 9;
+
+  // Creator info
+  string created_by = 10;
+  google.protobuf.Timestamp created_at = 11;
+
+  // Change ticket reference
+  string change_ticket_id = 12;
+
+  // Status
+  MaintenanceStatus status = 13;
+}
+
+enum MaintenanceAction {
+  MAINTENANCE_ACTION_UNSPECIFIED = 0;
+  MAINTENANCE_ACTION_SUPPRESS = 1;      // Suppress matching alerts
+  MAINTENANCE_ACTION_ANNOTATE = 2;      // Add maintenance label, still notify
+  MAINTENANCE_ACTION_REDUCE_SEVERITY = 3; // Downgrade severity
+}
+
+enum MaintenanceStatus {
+  MAINTENANCE_STATUS_UNSPECIFIED = 0;
+  MAINTENANCE_STATUS_SCHEDULED = 1;
+  MAINTENANCE_STATUS_IN_PROGRESS = 2;
+  MAINTENANCE_STATUS_COMPLETED = 3;
+  MAINTENANCE_STATUS_CANCELLED = 4;
+}
+
+// =============================================================================
+// ESCALATION POLICIES
+// =============================================================================
+
+// EscalationPolicy defines how alerts escalate over time
+message EscalationPolicy {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+
+  // Escalation steps in order
+  repeated EscalationStep steps = 4;
+
+  // Number of times to repeat the entire policy
+  int32 repeat_count = 5;
+
+  // What to do if escalation exhausted
+  EscalationExhaustedAction exhausted_action = 6;
+
+  // Metadata
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+message EscalationStep {
+  int32 step_number = 1;
+
+  // Delay before this step executes (0 for immediate first step)
+  google.protobuf.Duration delay = 2;
+
+  // Targets to notify at this step
+  repeated EscalationTarget targets = 3;
+
+  // Condition to skip this step
+  string skip_condition_cel = 4;
+}
+
+message EscalationTarget {
+  EscalationTargetType type = 1;
+
+  // Target reference (use appropriate field based on type)
+  string user_id = 2;
+  string schedule_id = 3;
+  string team_id = 4;
+  NotificationTarget channel = 5;
+}
+
+enum EscalationTargetType {
+  ESCALATION_TARGET_TYPE_UNSPECIFIED = 0;
+  ESCALATION_TARGET_TYPE_USER = 1;
+  ESCALATION_TARGET_TYPE_SCHEDULE = 2;
+  ESCALATION_TARGET_TYPE_TEAM = 3;
+  ESCALATION_TARGET_TYPE_CHANNEL = 4;
+}
+
+message EscalationExhaustedAction {
+  // What to do
+  ExhaustedActionType type = 1;
+
+  // Target if type is NOTIFY
+  NotificationTarget fallback_target = 2;
+
+  // Create incident if type is CREATE_INCIDENT
+  string incident_severity = 3;
+}
+
+enum ExhaustedActionType {
+  EXHAUSTED_ACTION_TYPE_UNSPECIFIED = 0;
+  EXHAUSTED_ACTION_TYPE_STOP = 1;
+  EXHAUSTED_ACTION_TYPE_REPEAT = 2;
+  EXHAUSTED_ACTION_TYPE_NOTIFY_FALLBACK = 3;
+  EXHAUSTED_ACTION_TYPE_CREATE_INCIDENT = 4;
+}
+
+// =============================================================================
+// ROUTING AUDIT
+// =============================================================================
+
+// RoutingAuditLog records routing decisions for debugging/compliance
+message RoutingAuditLog {
+  string id = 1;
+  string alert_id = 2;
+
+  // Timestamp of routing decision
+  google.protobuf.Timestamp timestamp = 3;
+
+  // Rules evaluated
+  repeated RuleEvaluation evaluations = 4;
+
+  // Final actions taken
+  repeated ActionExecution executions = 5;
+
+  // Input alert snapshot
+  google.protobuf.Struct alert_snapshot = 6;
+
+  // Maintenance window result
+  MaintenanceResult maintenance_result = 7;
+}
+
+message RuleEvaluation {
+  string rule_id = 1;
+  string rule_name = 2;
+  int32 priority = 3;
+
+  // Did all conditions match?
+  bool matched = 4;
+
+  // Individual condition results
+  repeated ConditionResult condition_results = 5;
+
+  // Was this rule terminal (stopped evaluation)?
+  bool terminal = 6;
+
+  // Time condition result
+  bool time_condition_matched = 7;
+  string time_condition_reason = 8;
+}
+
+message ConditionResult {
+  int32 condition_index = 1;
+  ConditionType type = 2;
+  string field = 3;
+  string expected = 4;
+  string actual = 5;
+  bool matched = 6;
+}
+
+message ActionExecution {
+  string rule_id = 1;
+  ActionType action_type = 2;
+
+  // Action details
+  google.protobuf.Struct action_details = 3;
+
+  // Execution result
+  bool success = 4;
+  string error_message = 5;
+
+  // For notify actions
+  repeated string notification_ids = 6;
+
+  // Execution time
+  google.protobuf.Timestamp executed_at = 7;
+}
+
+message MaintenanceResult {
+  bool in_maintenance = 1;
+  MaintenanceWindow window = 2;
+  MaintenanceAction action = 3;
+}

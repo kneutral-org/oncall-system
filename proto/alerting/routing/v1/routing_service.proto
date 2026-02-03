@@ -1,0 +1,842 @@
+// Alert Routing System - Service Definitions
+// gRPC services for routing rule management, team management, and scheduling
+
+syntax = "proto3";
+
+package alerting.routing.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/struct.proto";
+import "alerting/routing/v1/routing.proto";
+
+option go_package = "github.com/kneutral-org/alerting-system/pkg/proto/routing/v1;routingv1";
+
+// =============================================================================
+// ROUTING SERVICE
+// =============================================================================
+
+// RoutingService provides CRUD operations for routing rules
+service RoutingService {
+  // Create a new routing rule
+  rpc CreateRoutingRule(CreateRoutingRuleRequest) returns (RoutingRule);
+
+  // Get a routing rule by ID
+  rpc GetRoutingRule(GetRoutingRuleRequest) returns (RoutingRule);
+
+  // List routing rules with filters
+  rpc ListRoutingRules(ListRoutingRulesRequest) returns (ListRoutingRulesResponse);
+
+  // Update a routing rule
+  rpc UpdateRoutingRule(UpdateRoutingRuleRequest) returns (RoutingRule);
+
+  // Delete a routing rule
+  rpc DeleteRoutingRule(DeleteRoutingRuleRequest) returns (DeleteRoutingRuleResponse);
+
+  // Reorder routing rules (update priorities)
+  rpc ReorderRoutingRules(ReorderRoutingRulesRequest) returns (ReorderRoutingRulesResponse);
+
+  // Test a routing rule against sample alert (dry-run)
+  rpc TestRoutingRule(TestRoutingRuleRequest) returns (TestRoutingRuleResponse);
+
+  // Simulate routing for an alert (shows which rules would match)
+  rpc SimulateRouting(SimulateRoutingRequest) returns (SimulateRoutingResponse);
+
+  // Get routing audit logs
+  rpc GetRoutingAuditLogs(GetRoutingAuditLogsRequest) returns (GetRoutingAuditLogsResponse);
+
+  // Execute routing for an alert (internal use by alert engine)
+  rpc RouteAlert(RouteAlertRequest) returns (RouteAlertResponse);
+}
+
+// =============================================================================
+// ROUTING RULE REQUESTS/RESPONSES
+// =============================================================================
+
+message CreateRoutingRuleRequest {
+  RoutingRule rule = 1;
+}
+
+message GetRoutingRuleRequest {
+  string id = 1;
+}
+
+message ListRoutingRulesRequest {
+  // Pagination
+  int32 page_size = 1;
+  string page_token = 2;
+
+  // Filters
+  bool enabled_only = 3;
+  repeated string tags = 4;
+  string name_contains = 5;
+
+  // Sort order
+  string order_by = 6; // "priority", "name", "created_at"
+}
+
+message ListRoutingRulesResponse {
+  repeated RoutingRule rules = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+}
+
+message UpdateRoutingRuleRequest {
+  RoutingRule rule = 1;
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteRoutingRuleRequest {
+  string id = 1;
+}
+
+message DeleteRoutingRuleResponse {
+  bool success = 1;
+}
+
+message ReorderRoutingRulesRequest {
+  // Map of rule_id to new priority
+  map<string, int32> rule_priorities = 1;
+}
+
+message ReorderRoutingRulesResponse {
+  repeated RoutingRule updated_rules = 1;
+}
+
+// Test a single rule against a sample alert
+message TestRoutingRuleRequest {
+  // Rule to test (can be new or existing)
+  RoutingRule rule = 1;
+
+  // Sample alert to test against
+  Alert sample_alert = 2;
+
+  // Optional: simulate at a specific time
+  google.protobuf.Timestamp simulate_time = 3;
+}
+
+message TestRoutingRuleResponse {
+  // Did the rule match?
+  bool matched = 1;
+
+  // Individual condition results
+  repeated ConditionResult condition_results = 2;
+
+  // Actions that would be executed
+  repeated RoutingAction matched_actions = 3;
+
+  // Time condition result
+  bool time_condition_matched = 4;
+  string time_condition_reason = 5;
+}
+
+// Simulate full routing pipeline
+message SimulateRoutingRequest {
+  Alert alert = 1;
+
+  // Optional: simulate at a specific time
+  google.protobuf.Timestamp simulate_time = 2;
+
+  // Include disabled rules in simulation
+  bool include_disabled = 3;
+}
+
+message SimulateRoutingResponse {
+  // All rules evaluated
+  repeated RuleEvaluation evaluations = 1;
+
+  // Final actions that would be executed
+  repeated ActionExecution actions = 2;
+
+  // Maintenance window status
+  MaintenanceResult maintenance_result = 3;
+
+  // Warnings/suggestions
+  repeated string warnings = 4;
+}
+
+// Audit log request
+message GetRoutingAuditLogsRequest {
+  // Filter by alert ID
+  string alert_id = 1;
+
+  // Filter by rule ID
+  string rule_id = 2;
+
+  // Time range
+  google.protobuf.Timestamp start_time = 3;
+  google.protobuf.Timestamp end_time = 4;
+
+  // Pagination
+  int32 page_size = 5;
+  string page_token = 6;
+}
+
+message GetRoutingAuditLogsResponse {
+  repeated RoutingAuditLog logs = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+}
+
+// Internal: Execute routing for an alert
+message RouteAlertRequest {
+  Alert alert = 1;
+}
+
+message RouteAlertResponse {
+  // Routing audit log
+  RoutingAuditLog audit_log = 1;
+
+  // Notification IDs created
+  repeated string notification_ids = 2;
+
+  // Escalation started
+  bool escalation_started = 3;
+  string escalation_id = 4;
+
+  // Alert was suppressed
+  bool suppressed = 5;
+  string suppression_reason = 6;
+}
+
+// Alert message for routing (simplified from alerting.v1.Alert)
+message Alert {
+  string id = 1;
+  string summary = 2;
+  string details = 3;
+  AlertStatus status = 4;
+  AlertSource source = 5;
+  string fingerprint = 6;
+  map<string, string> labels = 7;
+  map<string, string> annotations = 8;
+  google.protobuf.Timestamp created_at = 9;
+  string service_id = 10;
+}
+
+enum AlertStatus {
+  ALERT_STATUS_UNSPECIFIED = 0;
+  ALERT_STATUS_TRIGGERED = 1;
+  ALERT_STATUS_ACKNOWLEDGED = 2;
+  ALERT_STATUS_RESOLVED = 3;
+}
+
+enum AlertSource {
+  ALERT_SOURCE_UNSPECIFIED = 0;
+  ALERT_SOURCE_PROMETHEUS = 1;
+  ALERT_SOURCE_GRAFANA = 2;
+  ALERT_SOURCE_GENERIC = 3;
+  ALERT_SOURCE_MANUAL = 4;
+}
+
+// =============================================================================
+// TEAM SERVICE
+// =============================================================================
+
+service TeamService {
+  // Team CRUD
+  rpc CreateTeam(CreateTeamRequest) returns (Team);
+  rpc GetTeam(GetTeamRequest) returns (Team);
+  rpc ListTeams(ListTeamsRequest) returns (ListTeamsResponse);
+  rpc UpdateTeam(UpdateTeamRequest) returns (Team);
+  rpc DeleteTeam(DeleteTeamRequest) returns (DeleteTeamResponse);
+
+  // Member management
+  rpc AddTeamMember(AddTeamMemberRequest) returns (Team);
+  rpc RemoveTeamMember(RemoveTeamMemberRequest) returns (Team);
+  rpc UpdateTeamMember(UpdateTeamMemberRequest) returns (Team);
+
+  // Get teams for a user
+  rpc GetUserTeams(GetUserTeamsRequest) returns (ListTeamsResponse);
+}
+
+message CreateTeamRequest {
+  Team team = 1;
+}
+
+message GetTeamRequest {
+  string id = 1;
+}
+
+message ListTeamsRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+  string name_contains = 3;
+  string site_id = 4; // Filter by assigned site
+}
+
+message ListTeamsResponse {
+  repeated Team teams = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+}
+
+message UpdateTeamRequest {
+  Team team = 1;
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteTeamRequest {
+  string id = 1;
+}
+
+message DeleteTeamResponse {
+  bool success = 1;
+}
+
+message AddTeamMemberRequest {
+  string team_id = 1;
+  TeamMember member = 2;
+}
+
+message RemoveTeamMemberRequest {
+  string team_id = 1;
+  string user_id = 2;
+}
+
+message UpdateTeamMemberRequest {
+  string team_id = 1;
+  TeamMember member = 2;
+  google.protobuf.FieldMask update_mask = 3;
+}
+
+message GetUserTeamsRequest {
+  string user_id = 1;
+}
+
+// =============================================================================
+// SCHEDULE SERVICE
+// =============================================================================
+
+service ScheduleService {
+  // Schedule CRUD
+  rpc CreateSchedule(CreateScheduleRequest) returns (Schedule);
+  rpc GetSchedule(GetScheduleRequest) returns (Schedule);
+  rpc ListSchedules(ListSchedulesRequest) returns (ListSchedulesResponse);
+  rpc UpdateSchedule(UpdateScheduleRequest) returns (Schedule);
+  rpc DeleteSchedule(DeleteScheduleRequest) returns (DeleteScheduleResponse);
+
+  // Rotation management
+  rpc AddRotation(AddRotationRequest) returns (Schedule);
+  rpc UpdateRotation(UpdateRotationRequest) returns (Schedule);
+  rpc RemoveRotation(RemoveRotationRequest) returns (Schedule);
+
+  // Override management
+  rpc CreateOverride(CreateOverrideRequest) returns (ScheduleOverride);
+  rpc DeleteOverride(DeleteOverrideRequest) returns (DeleteOverrideResponse);
+  rpc ListOverrides(ListOverridesRequest) returns (ListOverridesResponse);
+
+  // On-call queries
+  rpc GetCurrentOnCall(GetCurrentOnCallRequest) returns (GetCurrentOnCallResponse);
+  rpc GetOnCallAtTime(GetOnCallAtTimeRequest) returns (GetOnCallAtTimeResponse);
+  rpc ListUpcomingShifts(ListUpcomingShiftsRequest) returns (ListUpcomingShiftsResponse);
+
+  // Handoff
+  rpc AcknowledgeHandoff(AcknowledgeHandoffRequest) returns (AcknowledgeHandoffResponse);
+  rpc GetHandoffSummary(GetHandoffSummaryRequest) returns (HandoffSummary);
+}
+
+message CreateScheduleRequest {
+  Schedule schedule = 1;
+}
+
+message GetScheduleRequest {
+  string id = 1;
+}
+
+message ListSchedulesRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+  string team_id = 3; // Filter by team
+}
+
+message ListSchedulesResponse {
+  repeated Schedule schedules = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+}
+
+message UpdateScheduleRequest {
+  Schedule schedule = 1;
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteScheduleRequest {
+  string id = 1;
+}
+
+message DeleteScheduleResponse {
+  bool success = 1;
+}
+
+message AddRotationRequest {
+  string schedule_id = 1;
+  Rotation rotation = 2;
+}
+
+message UpdateRotationRequest {
+  string schedule_id = 1;
+  Rotation rotation = 2;
+  google.protobuf.FieldMask update_mask = 3;
+}
+
+message RemoveRotationRequest {
+  string schedule_id = 1;
+  string rotation_id = 2;
+}
+
+message CreateOverrideRequest {
+  string schedule_id = 1;
+  ScheduleOverride override = 2;
+}
+
+message DeleteOverrideRequest {
+  string schedule_id = 1;
+  string override_id = 2;
+}
+
+message DeleteOverrideResponse {
+  bool success = 1;
+}
+
+message ListOverridesRequest {
+  string schedule_id = 1;
+  google.protobuf.Timestamp start_time = 2;
+  google.protobuf.Timestamp end_time = 3;
+  int32 page_size = 4;
+  string page_token = 5;
+}
+
+message ListOverridesResponse {
+  repeated ScheduleOverride overrides = 1;
+  string next_page_token = 2;
+}
+
+message GetCurrentOnCallRequest {
+  string schedule_id = 1;
+}
+
+message GetCurrentOnCallResponse {
+  string primary_user_id = 1;
+  string secondary_user_id = 2;
+  Shift current_shift = 3;
+  google.protobuf.Timestamp next_handoff = 4;
+}
+
+message GetOnCallAtTimeRequest {
+  string schedule_id = 1;
+  google.protobuf.Timestamp time = 2;
+}
+
+message GetOnCallAtTimeResponse {
+  string primary_user_id = 1;
+  string secondary_user_id = 2;
+  Shift shift = 3;
+}
+
+message ListUpcomingShiftsRequest {
+  string schedule_id = 1;
+
+  // How far ahead to look
+  google.protobuf.Timestamp until = 2;
+
+  // Filter by user
+  string user_id = 3;
+
+  int32 page_size = 4;
+  string page_token = 5;
+}
+
+message ListUpcomingShiftsResponse {
+  repeated Shift shifts = 1;
+  string next_page_token = 2;
+}
+
+message AcknowledgeHandoffRequest {
+  string schedule_id = 1;
+  string user_id = 2;
+}
+
+message AcknowledgeHandoffResponse {
+  bool success = 1;
+  Shift shift = 2;
+}
+
+message GetHandoffSummaryRequest {
+  string schedule_id = 1;
+}
+
+message HandoffSummary {
+  string schedule_id = 1;
+  string outgoing_user_id = 2;
+  string incoming_user_id = 3;
+  google.protobuf.Timestamp handoff_time = 4;
+
+  // Active alerts at handoff
+  repeated Alert active_alerts = 5;
+
+  // Open ticket summaries
+  repeated TicketSummary open_tickets = 6;
+
+  // Recent notable events
+  repeated Event recent_events = 7;
+
+  // Handoff notes from outgoing user
+  string handoff_notes = 8;
+}
+
+message TicketSummary {
+  string id = 1;
+  string external_id = 2;
+  string provider = 3;
+  string title = 4;
+  string status = 5;
+  string priority = 6;
+  google.protobuf.Timestamp created_at = 7;
+}
+
+message Event {
+  string id = 1;
+  string type = 2;
+  string description = 3;
+  google.protobuf.Timestamp timestamp = 4;
+  string user_id = 5;
+  map<string, string> metadata = 6;
+}
+
+// =============================================================================
+// SITE SERVICE (ISP/DC)
+// =============================================================================
+
+service SiteService {
+  rpc CreateSite(CreateSiteRequest) returns (Site);
+  rpc GetSite(GetSiteRequest) returns (Site);
+  rpc ListSites(ListSitesRequest) returns (ListSitesResponse);
+  rpc UpdateSite(UpdateSiteRequest) returns (Site);
+  rpc DeleteSite(DeleteSiteRequest) returns (DeleteSiteResponse);
+
+  // Get site by code (e.g., "IAD1")
+  rpc GetSiteByCode(GetSiteByCodeRequest) returns (Site);
+}
+
+message CreateSiteRequest {
+  Site site = 1;
+}
+
+message GetSiteRequest {
+  string id = 1;
+}
+
+message GetSiteByCodeRequest {
+  string code = 1;
+}
+
+message ListSitesRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+  SiteType type = 3;
+  string region = 4;
+  int32 tier = 5;
+}
+
+message ListSitesResponse {
+  repeated Site sites = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+}
+
+message UpdateSiteRequest {
+  Site site = 1;
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteSiteRequest {
+  string id = 1;
+}
+
+message DeleteSiteResponse {
+  bool success = 1;
+}
+
+// =============================================================================
+// MAINTENANCE SERVICE
+// =============================================================================
+
+service MaintenanceService {
+  rpc CreateMaintenanceWindow(CreateMaintenanceWindowRequest) returns (MaintenanceWindow);
+  rpc GetMaintenanceWindow(GetMaintenanceWindowRequest) returns (MaintenanceWindow);
+  rpc ListMaintenanceWindows(ListMaintenanceWindowsRequest) returns (ListMaintenanceWindowsResponse);
+  rpc UpdateMaintenanceWindow(UpdateMaintenanceWindowRequest) returns (MaintenanceWindow);
+  rpc DeleteMaintenanceWindow(DeleteMaintenanceWindowRequest) returns (DeleteMaintenanceWindowResponse);
+
+  // Get active maintenance windows
+  rpc ListActiveMaintenanceWindows(ListActiveMaintenanceWindowsRequest) returns (ListMaintenanceWindowsResponse);
+
+  // Check if alert is in maintenance
+  rpc CheckAlertMaintenance(CheckAlertMaintenanceRequest) returns (CheckAlertMaintenanceResponse);
+}
+
+message CreateMaintenanceWindowRequest {
+  MaintenanceWindow window = 1;
+}
+
+message GetMaintenanceWindowRequest {
+  string id = 1;
+}
+
+message ListMaintenanceWindowsRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+  google.protobuf.Timestamp start_time = 3;
+  google.protobuf.Timestamp end_time = 4;
+  MaintenanceStatus status = 5;
+  string site_id = 6;
+}
+
+message ListMaintenanceWindowsResponse {
+  repeated MaintenanceWindow windows = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+}
+
+message UpdateMaintenanceWindowRequest {
+  MaintenanceWindow window = 1;
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteMaintenanceWindowRequest {
+  string id = 1;
+}
+
+message DeleteMaintenanceWindowResponse {
+  bool success = 1;
+}
+
+message ListActiveMaintenanceWindowsRequest {
+  // Optional: filter to specific sites/services
+  repeated string site_ids = 1;
+  repeated string service_ids = 2;
+}
+
+message CheckAlertMaintenanceRequest {
+  Alert alert = 1;
+}
+
+message CheckAlertMaintenanceResponse {
+  bool in_maintenance = 1;
+  repeated MaintenanceWindow matching_windows = 2;
+  MaintenanceAction recommended_action = 3;
+}
+
+// =============================================================================
+// ESCALATION SERVICE
+// =============================================================================
+
+service EscalationService {
+  rpc CreateEscalationPolicy(CreateEscalationPolicyRequest) returns (EscalationPolicy);
+  rpc GetEscalationPolicy(GetEscalationPolicyRequest) returns (EscalationPolicy);
+  rpc ListEscalationPolicies(ListEscalationPoliciesRequest) returns (ListEscalationPoliciesResponse);
+  rpc UpdateEscalationPolicy(UpdateEscalationPolicyRequest) returns (EscalationPolicy);
+  rpc DeleteEscalationPolicy(DeleteEscalationPolicyRequest) returns (DeleteEscalationPolicyResponse);
+
+  // Escalation execution
+  rpc StartEscalation(StartEscalationRequest) returns (StartEscalationResponse);
+  rpc GetEscalationStatus(GetEscalationStatusRequest) returns (EscalationStatus);
+  rpc StopEscalation(StopEscalationRequest) returns (StopEscalationResponse);
+}
+
+message CreateEscalationPolicyRequest {
+  EscalationPolicy policy = 1;
+}
+
+message GetEscalationPolicyRequest {
+  string id = 1;
+}
+
+message ListEscalationPoliciesRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+}
+
+message ListEscalationPoliciesResponse {
+  repeated EscalationPolicy policies = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+}
+
+message UpdateEscalationPolicyRequest {
+  EscalationPolicy policy = 1;
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteEscalationPolicyRequest {
+  string id = 1;
+}
+
+message DeleteEscalationPolicyResponse {
+  bool success = 1;
+}
+
+message StartEscalationRequest {
+  string policy_id = 1;
+  string alert_id = 2;
+  int32 start_at_step = 3;
+  bool urgent = 4;
+}
+
+message StartEscalationResponse {
+  string escalation_id = 1;
+  int32 current_step = 2;
+  google.protobuf.Timestamp next_step_at = 3;
+}
+
+message GetEscalationStatusRequest {
+  string escalation_id = 1;
+}
+
+message EscalationStatus {
+  string escalation_id = 1;
+  string policy_id = 2;
+  string alert_id = 3;
+  int32 current_step = 4;
+  int32 repeat_count = 5;
+  EscalationState state = 6;
+  google.protobuf.Timestamp started_at = 7;
+  google.protobuf.Timestamp next_step_at = 8;
+  repeated EscalationStepResult step_results = 9;
+}
+
+enum EscalationState {
+  ESCALATION_STATE_UNSPECIFIED = 0;
+  ESCALATION_STATE_ACTIVE = 1;
+  ESCALATION_STATE_ACKNOWLEDGED = 2;
+  ESCALATION_STATE_RESOLVED = 3;
+  ESCALATION_STATE_EXHAUSTED = 4;
+  ESCALATION_STATE_STOPPED = 5;
+}
+
+message EscalationStepResult {
+  int32 step_number = 1;
+  google.protobuf.Timestamp executed_at = 2;
+  repeated string notification_ids = 3;
+  bool acknowledged = 4;
+  string acknowledged_by = 5;
+}
+
+message StopEscalationRequest {
+  string escalation_id = 1;
+  string reason = 2;
+  string stopped_by = 3;
+}
+
+message StopEscalationResponse {
+  bool success = 1;
+}
+
+// =============================================================================
+// CUSTOMER TIER SERVICE (ISP/DC)
+// =============================================================================
+
+service CustomerTierService {
+  rpc CreateCustomerTier(CreateCustomerTierRequest) returns (CustomerTier);
+  rpc GetCustomerTier(GetCustomerTierRequest) returns (CustomerTier);
+  rpc ListCustomerTiers(ListCustomerTiersRequest) returns (ListCustomerTiersResponse);
+  rpc UpdateCustomerTier(UpdateCustomerTierRequest) returns (CustomerTier);
+  rpc DeleteCustomerTier(DeleteCustomerTierRequest) returns (DeleteCustomerTierResponse);
+
+  // Resolve customer tier from alert labels
+  rpc ResolveCustomerTier(ResolveCustomerTierRequest) returns (ResolveCustomerTierResponse);
+}
+
+message CreateCustomerTierRequest {
+  CustomerTier tier = 1;
+}
+
+message GetCustomerTierRequest {
+  string id = 1;
+}
+
+message ListCustomerTiersRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+}
+
+message ListCustomerTiersResponse {
+  repeated CustomerTier tiers = 1;
+  string next_page_token = 2;
+}
+
+message UpdateCustomerTierRequest {
+  CustomerTier tier = 1;
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteCustomerTierRequest {
+  string id = 1;
+}
+
+message DeleteCustomerTierResponse {
+  bool success = 1;
+}
+
+message ResolveCustomerTierRequest {
+  // Customer identifier from alert
+  string customer_id = 1;
+
+  // Or labels to match
+  map<string, string> labels = 2;
+}
+
+message ResolveCustomerTierResponse {
+  CustomerTier tier = 1;
+  bool found = 2;
+}
+
+// =============================================================================
+// CARRIER SERVICE (ISP/DC)
+// =============================================================================
+
+service CarrierService {
+  rpc CreateCarrier(CreateCarrierRequest) returns (CarrierConfig);
+  rpc GetCarrier(GetCarrierRequest) returns (CarrierConfig);
+  rpc ListCarriers(ListCarriersRequest) returns (ListCarriersResponse);
+  rpc UpdateCarrier(UpdateCarrierRequest) returns (CarrierConfig);
+  rpc DeleteCarrier(DeleteCarrierRequest) returns (DeleteCarrierResponse);
+
+  // Get carrier by ASN
+  rpc GetCarrierByASN(GetCarrierByASNRequest) returns (CarrierConfig);
+}
+
+message CreateCarrierRequest {
+  CarrierConfig carrier = 1;
+}
+
+message GetCarrierRequest {
+  string id = 1;
+}
+
+message GetCarrierByASNRequest {
+  string asn = 1;
+}
+
+message ListCarriersRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+}
+
+message ListCarriersResponse {
+  repeated CarrierConfig carriers = 1;
+  string next_page_token = 2;
+}
+
+message UpdateCarrierRequest {
+  CarrierConfig carrier = 1;
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteCarrierRequest {
+  string id = 1;
+}
+
+message DeleteCarrierResponse {
+  bool success = 1;
+}
