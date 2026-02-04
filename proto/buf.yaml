@@ -1,0 +1,16 @@
+version: v1
+name: buf.build/kneutral-org/alerting-system
+deps:
+  - buf.build/googleapis/googleapis
+lint:
+  use:
+    - DEFAULT
+  except:
+    # Allow reusing message types as RPC responses (common pattern for CRUD)
+    - RPC_RESPONSE_STANDARD_NAME
+    - RPC_REQUEST_RESPONSE_UNIQUE
+    # Allow ONCALL naming (domain-specific)
+    - ENUM_VALUE_PREFIX
+breaking:
+  use:
+    - FILE

@@ -8,9 +8,8 @@ package alerting.routing.v1;
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/struct.proto";
-import "google/protobuf/field_mask.proto";
 
-option go_package = "github.com/kneutral-org/alerting-system/pkg/proto/routing/v1;routingv1";
+option go_package = "github.com/kneutral-org/alerting-system/pkg/proto/alerting/routing/v1;routingv1";
 
 // =============================================================================
 // ROUTING RULES
