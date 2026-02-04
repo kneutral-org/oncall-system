@@ -1,0 +1,2 @@
+-- Extensions are shared, typically not dropped
+-- DROP EXTENSION IF EXISTS "uuid-ossp";
