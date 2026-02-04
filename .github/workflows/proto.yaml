@@ -3,7 +3,7 @@ name: Proto CI
 on:
   push:
     branches:
-      - main
+      - master
     paths:
       - 'proto/**'
       - 'buf.gen.yaml'
@@ -82,4 +82,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Buf Breaking
-        run: buf breaking proto --against '.git#branch=main'
+        run: buf breaking proto --against '.git#branch=master'
