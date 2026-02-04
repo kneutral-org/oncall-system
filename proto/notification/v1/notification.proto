@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+package notification.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+option go_package = "github.com/kneutral-org/alerting-system/pkg/proto/notification/v1;notificationv1";
+
+// ChannelType defines the notification delivery channels
+enum ChannelType {
+  CHANNEL_TYPE_UNSPECIFIED = 0;
+  CHANNEL_TYPE_SLACK = 1;
+  CHANNEL_TYPE_TEAMS = 2;
+  CHANNEL_TYPE_EMAIL = 3;
+  CHANNEL_TYPE_SMS = 4;
+  CHANNEL_TYPE_VOICE = 5;
+  CHANNEL_TYPE_WEBHOOK = 6;
+}
+
+// NotificationPriority defines the urgency level of a notification
+enum NotificationPriority {
+  NOTIFICATION_PRIORITY_UNSPECIFIED = 0;
+  NOTIFICATION_PRIORITY_LOW = 1;
+  NOTIFICATION_PRIORITY_NORMAL = 2;
+  NOTIFICATION_PRIORITY_HIGH = 3;
+  NOTIFICATION_PRIORITY_CRITICAL = 4;
+}
+
+// DeliveryState represents the current state of a notification delivery
+enum DeliveryState {
+  DELIVERY_STATE_UNSPECIFIED = 0;
+  DELIVERY_STATE_PENDING = 1;
+  DELIVERY_STATE_SENT = 2;
+  DELIVERY_STATE_DELIVERED = 3;
+  DELIVERY_STATE_FAILED = 4;
+  DELIVERY_STATE_RETRYING = 5;
+}
+
+// Destination specifies where a notification should be sent
+message Destination {
+  string user_id = 1;
+  ChannelType channel_type = 2;
+  string channel_address = 3;  // email address, phone number, slack channel, etc.
+}
+
+// SendNotificationRequest is the request to send a notification
+message SendNotificationRequest {
+  string request_id = 1;  // Idempotency key
+  string template_id = 2;
+  google.protobuf.Struct render_context = 3;  // Variables for template rendering
+  repeated Destination destinations = 4;
+  NotificationPriority priority = 5;
+}
+
+// SendNotificationResponse is the response after queuing a notification
+message SendNotificationResponse {
+  string request_id = 1;
+  repeated string delivery_ids = 2;  // One per destination
+  google.protobuf.Timestamp queued_at = 3;
+}
+
+// DeliveryStatus represents the delivery status of a notification to a destination
+message DeliveryStatus {
+  string id = 1;
+  string request_id = 2;
+  Destination destination = 3;
+  DeliveryState status = 4;
+  google.protobuf.Timestamp sent_at = 5;
+  google.protobuf.Timestamp delivered_at = 6;
+  string error_message = 7;
+  int32 retry_count = 8;
+  google.protobuf.Timestamp next_retry_at = 9;
+}
+
+// GetDeliveryStatusRequest requests the status of a specific delivery
+message GetDeliveryStatusRequest {
+  string delivery_id = 1;
+}
+
+// ListDeliveryStatusRequest requests delivery statuses with filters
+message ListDeliveryStatusRequest {
+  string request_id = 1;  // Filter by original request
+  repeated DeliveryState states = 2;  // Filter by delivery states
+  int32 page_size = 3;
+  string page_token = 4;
+}
+
+// ListDeliveryStatusResponse contains a list of delivery statuses
+message ListDeliveryStatusResponse {
+  repeated DeliveryStatus deliveries = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+}
