@@ -15,6 +15,7 @@ type Handler struct {
 	alertStore   store.AlertStore
 	serviceStore store.ServiceStore
 	logger       zerolog.Logger
+	config       WebhookConfig
 }
 
 // NewHandler creates a new webhook handler with the provided dependencies.
@@ -23,15 +24,54 @@ func NewHandler(alertStore store.AlertStore, serviceStore store.ServiceStore, lo
 		alertStore:   alertStore,
 		serviceStore: serviceStore,
 		logger:       logger.With().Str("component", "webhook").Logger(),
+		config:       WebhookConfig{},
+	}
+}
+
+// NewHandlerWithConfig creates a new webhook handler with the provided dependencies and HMAC configuration.
+func NewHandlerWithConfig(alertStore store.AlertStore, serviceStore store.ServiceStore, logger zerolog.Logger, config WebhookConfig) *Handler {
+	return &Handler{
+		alertStore:   alertStore,
+		serviceStore: serviceStore,
+		logger:       logger.With().Str("component", "webhook").Logger(),
+		config:       config,
 	}
 }
 
 // RegisterRoutes registers all webhook routes on the provided router group.
+// HMAC signature verification is applied per source if secrets are configured.
 func (h *Handler) RegisterRoutes(router *gin.RouterGroup) {
 	webhooks := router.Group("/webhook")
-	webhooks.POST("/alertmanager/:integration_key", h.AlertmanagerWebhook)
-	webhooks.POST("/grafana/:integration_key", h.GrafanaWebhook)
-	webhooks.POST("/generic/:integration_key", h.GenericWebhook)
+
+	// Register Alertmanager webhook with optional HMAC middleware
+	if h.config.AlertmanagerSecret != "" {
+		alertmanager := webhooks.Group("/alertmanager")
+		alertmanager.Use(HMACMiddleware(DefaultAlertmanagerConfig(h.config.AlertmanagerSecret)))
+		alertmanager.POST("/:integration_key", h.AlertmanagerWebhook)
+		h.logger.Info().Msg("Alertmanager webhook HMAC verification enabled")
+	} else {
+		webhooks.POST("/alertmanager/:integration_key", h.AlertmanagerWebhook)
+	}
+
+	// Register Grafana webhook with optional HMAC middleware
+	if h.config.GrafanaSecret != "" {
+		grafana := webhooks.Group("/grafana")
+		grafana.Use(HMACMiddleware(DefaultGrafanaConfig(h.config.GrafanaSecret)))
+		grafana.POST("/:integration_key", h.GrafanaWebhook)
+		h.logger.Info().Msg("Grafana webhook HMAC verification enabled")
+	} else {
+		webhooks.POST("/grafana/:integration_key", h.GrafanaWebhook)
+	}
+
+	// Register Generic webhook with optional HMAC middleware
+	if h.config.GenericSecret != "" {
+		generic := webhooks.Group("/generic")
+		generic.Use(HMACMiddleware(DefaultGenericConfig(h.config.GenericSecret)))
+		generic.POST("/:integration_key", h.GenericWebhook)
+		h.logger.Info().Msg("Generic webhook HMAC verification enabled")
+	} else {
+		webhooks.POST("/generic/:integration_key", h.GenericWebhook)
+	}
 }
 
 // validateIntegrationKey validates the integration key and returns the associated service.
