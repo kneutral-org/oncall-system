@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package alerting.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+option go_package = "github.com/kneutral-org/alerting-system/pkg/proto/alerting/v1;alertingv1";
+
+// Alert represents an alert in the system
+message Alert {
+  string id = 1;
+  string fingerprint = 2;  // Unique identifier for deduplication
+
+  // Content
+  string summary = 3;
+  string details = 4;
+  Severity severity = 5;
+
+  // Source
+  AlertSource source = 6;
+  string source_instance = 7;  // e.g., prometheus server name
+
+  // Classification
+  string service_id = 8;  // Service this alert belongs to
+  map<string, string> labels = 9;
+  map<string, string> annotations = 10;
+
+  // Lifecycle
+  AlertStatus status = 11;
+  google.protobuf.Timestamp triggered_at = 12;
+  google.protobuf.Timestamp acknowledged_at = 13;
+  google.protobuf.Timestamp resolved_at = 14;
+
+  // Actors
+  string acknowledged_by = 15;  // User ID
+  string resolved_by = 16;      // User ID
+  string escalated_to = 17;     // Escalation policy ID
+
+  // History
+  repeated AlertNote notes = 18;
+  repeated AlertEvent events = 19;
+
+  // Metadata
+  google.protobuf.Timestamp created_at = 20;
+  google.protobuf.Timestamp updated_at = 21;
+
+  // Webhook payload (original)
+  google.protobuf.Struct raw_payload = 22;
+}
+
+enum AlertStatus {
+  ALERT_STATUS_UNSPECIFIED = 0;
+  ALERT_STATUS_TRIGGERED = 1;
+  ALERT_STATUS_ACKNOWLEDGED = 2;
+  ALERT_STATUS_RESOLVED = 3;
+  ALERT_STATUS_SUPPRESSED = 4;  // During maintenance
+}
+
+enum AlertSource {
+  ALERT_SOURCE_UNSPECIFIED = 0;
+  ALERT_SOURCE_PROMETHEUS = 1;
+  ALERT_SOURCE_ALERTMANAGER = 2;
+  ALERT_SOURCE_GRAFANA = 3;
+  ALERT_SOURCE_GENERIC = 4;
+  ALERT_SOURCE_MANUAL = 5;
+}
+
+enum Severity {
+  SEVERITY_UNSPECIFIED = 0;
+  SEVERITY_CRITICAL = 1;
+  SEVERITY_HIGH = 2;
+  SEVERITY_MEDIUM = 3;
+  SEVERITY_LOW = 4;
+  SEVERITY_INFO = 5;
+}
+
+message AlertNote {
+  string id = 1;
+  string content = 2;
+  string created_by = 3;  // User ID
+  google.protobuf.Timestamp created_at = 4;
+}
+
+message AlertEvent {
+  string id = 1;
+  AlertEventType type = 2;
+  string description = 3;
+  string actor_id = 4;  // User ID or system
+  google.protobuf.Timestamp timestamp = 5;
+  map<string, string> metadata = 6;
+}
+
+enum AlertEventType {
+  ALERT_EVENT_TYPE_UNSPECIFIED = 0;
+  ALERT_EVENT_TYPE_CREATED = 1;
+  ALERT_EVENT_TYPE_ACKNOWLEDGED = 2;
+  ALERT_EVENT_TYPE_RESOLVED = 3;
+  ALERT_EVENT_TYPE_ESCALATED = 4;
+  ALERT_EVENT_TYPE_NOTE_ADDED = 5;
+  ALERT_EVENT_TYPE_REASSIGNED = 6;
+  ALERT_EVENT_TYPE_SUPPRESSED = 7;
+  ALERT_EVENT_TYPE_UNSUPPRESSED = 8;
+}
