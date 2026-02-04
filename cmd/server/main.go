@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -13,10 +14,15 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
+	"google.golang.org/grpc"
 
+	"github.com/kneutral-org/alerting-system/internal/escalation"
+	grpcserver "github.com/kneutral-org/alerting-system/internal/grpc"
 	"github.com/kneutral-org/alerting-system/internal/store"
+	"github.com/kneutral-org/alerting-system/internal/team"
 	"github.com/kneutral-org/alerting-system/internal/webhook"
 	alertingv1 "github.com/kneutral-org/alerting-system/pkg/proto/alerting/v1"
+	routingv1 "github.com/kneutral-org/alerting-system/pkg/proto/alerting/routing/v1"
 )
 
 func main() {
@@ -32,9 +38,17 @@ func main() {
 		port = "8080"
 	}
 
+	grpcPort := os.Getenv("GRPC_PORT")
+	if grpcPort == "" {
+		grpcPort = "9090"
+	}
+
 	// Initialize stores (in-memory for now, replace with real implementations)
 	alertStore := NewInMemoryAlertStore()
 	serviceStore := NewInMemoryServiceStore()
+	teamStore := team.NewInMemoryTeamStore()
+	policyStore := escalation.NewInMemoryPolicyStore()
+	activeEscalationStore := escalation.NewInMemoryActiveEscalationStore()
 
 	// Create a default service for testing
 	_, _ = serviceStore.Create(context.Background(), &store.Service{
@@ -73,11 +87,33 @@ func main() {
 		IdleTimeout:  60 * time.Second,
 	}
 
-	// Start server in a goroutine
+	// Start HTTP server in a goroutine
 	go func() {
 		logger.Info().Str("port", port).Msg("starting HTTP server")
 		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			logger.Fatal().Err(err).Msg("failed to start server")
+		}
+	}()
+
+	// Initialize gRPC server
+	grpcServer := grpc.NewServer()
+
+	// Register gRPC services
+	teamService := grpcserver.NewTeamServiceServer(teamStore)
+	escalationService := grpcserver.NewEscalationServiceServer(policyStore, activeEscalationStore)
+
+	routingv1.RegisterTeamServiceServer(grpcServer, teamService)
+	routingv1.RegisterEscalationServiceServer(grpcServer, escalationService)
+
+	// Start gRPC server in a goroutine
+	go func() {
+		lis, err := net.Listen("tcp", ":"+grpcPort)
+		if err != nil {
+			logger.Fatal().Err(err).Msg("failed to listen for gRPC")
+		}
+		logger.Info().Str("port", grpcPort).Msg("starting gRPC server")
+		if err := grpcServer.Serve(lis); err != nil {
+			logger.Fatal().Err(err).Msg("failed to serve gRPC")
 		}
 	}()
 
@@ -91,6 +127,10 @@ func main() {
 	// Graceful shutdown with timeout
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
+
+	// Graceful shutdown of gRPC server
+	grpcServer.GracefulStop()
+	logger.Info().Msg("gRPC server stopped")
 
 	if err := srv.Shutdown(ctx); err != nil {
 		logger.Fatal().Err(err).Msg("server forced to shutdown")
