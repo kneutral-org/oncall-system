@@ -1,0 +1,128 @@
+syntax = "proto3";
+
+package notification.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+import "notification/v1/notification.proto";
+
+option go_package = "github.com/kneutral-org/alerting-system/pkg/proto/notification/v1;notificationv1";
+
+// TemplateFormat defines the format of template content
+enum TemplateFormat {
+  TEMPLATE_FORMAT_UNSPECIFIED = 0;
+  TEMPLATE_FORMAT_PLAIN_TEXT = 1;
+  TEMPLATE_FORMAT_MARKDOWN = 2;
+  TEMPLATE_FORMAT_HTML = 3;
+  TEMPLATE_FORMAT_SLACK_BLOCKS = 4;
+  TEMPLATE_FORMAT_TEAMS_ADAPTIVE_CARD = 5;
+}
+
+// ChannelTemplate contains template content for a specific channel
+message ChannelTemplate {
+  ChannelType channel = 1;
+  string content = 2;  // Template content (Go template syntax)
+  TemplateFormat format = 3;
+  map<string, string> metadata = 4;  // Channel-specific metadata (e.g., subject for email)
+}
+
+// Template represents a notification template
+message Template {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  int32 current_version = 4;
+  repeated ChannelTemplate channel_templates = 5;
+  repeated string required_variables = 6;  // Variables that must be provided
+  repeated string optional_variables = 7;  // Variables that may be provided
+  string created_by_user_id = 8;
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
+}
+
+// RenderedPreview contains the rendered output for a channel
+message RenderedPreview {
+  ChannelType channel = 1;
+  string content = 2;
+  TemplateFormat format = 3;
+}
+
+// ValidationResult contains the result of template validation
+message ValidationResult {
+  bool valid = 1;
+  repeated string errors = 2;
+  repeated string warnings = 3;
+}
+
+// RenderPreviewRequest requests a preview of a rendered template
+message RenderPreviewRequest {
+  string template_id = 1;
+  int32 version = 2;  // 0 means current version
+  google.protobuf.Struct sample_data = 3;  // Sample variables for rendering
+  repeated ChannelType channels = 4;  // Which channels to preview
+}
+
+// RenderPreviewResponse contains rendered previews for each channel
+message RenderPreviewResponse {
+  map<string, RenderedPreview> previews = 1;  // Key is channel name
+  ValidationResult validation = 2;
+}
+
+// CreateTemplateRequest creates a new template
+message CreateTemplateRequest {
+  string name = 1;
+  string description = 2;
+  repeated ChannelTemplate channel_templates = 3;
+  repeated string required_variables = 4;
+  repeated string optional_variables = 5;
+  string created_by_user_id = 6;
+}
+
+// GetTemplateRequest gets a template by ID
+message GetTemplateRequest {
+  string id = 1;
+  int32 version = 2;  // 0 means current version
+}
+
+// UpdateTemplateRequest updates an existing template
+message UpdateTemplateRequest {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  repeated ChannelTemplate channel_templates = 4;
+  repeated string required_variables = 5;
+  repeated string optional_variables = 6;
+  string updated_by_user_id = 7;
+}
+
+// DeleteTemplateRequest deletes a template
+message DeleteTemplateRequest {
+  string id = 1;
+  string deleted_by_user_id = 2;
+}
+
+// DeleteTemplateResponse confirms template deletion
+message DeleteTemplateResponse {
+  bool deleted = 1;
+}
+
+// ListTemplatesRequest lists templates with optional filters
+message ListTemplatesRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+  string search_query = 3;  // Search in name/description
+  repeated ChannelType channels = 4;  // Filter by supported channels
+}
+
+// ListTemplatesResponse contains a list of templates
+message ListTemplatesResponse {
+  repeated Template templates = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+}
+
+// ValidateTemplateRequest validates a template without saving
+message ValidateTemplateRequest {
+  repeated ChannelTemplate channel_templates = 1;
+  google.protobuf.Struct sample_data = 2;  // Optional sample data for validation
+}

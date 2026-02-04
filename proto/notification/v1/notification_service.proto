@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package notification.v1;
+
+import "notification/v1/notification.proto";
+import "notification/v1/template.proto";
+
+option go_package = "github.com/kneutral-org/alerting-system/pkg/proto/notification/v1;notificationv1";
+
+// NotificationService provides notification delivery operations
+service NotificationService {
+  // SendNotification queues a notification for delivery to specified destinations
+  rpc SendNotification(SendNotificationRequest) returns (SendNotificationResponse);
+
+  // GetDeliveryStatus retrieves the delivery status of a specific notification
+  rpc GetDeliveryStatus(GetDeliveryStatusRequest) returns (DeliveryStatus);
+
+  // ListDeliveryStatus retrieves delivery statuses with optional filters
+  rpc ListDeliveryStatus(ListDeliveryStatusRequest) returns (ListDeliveryStatusResponse);
+}
+
+// TemplateService provides notification template management operations
+service TemplateService {
+  // CreateTemplate creates a new notification template
+  rpc CreateTemplate(CreateTemplateRequest) returns (Template);
+
+  // GetTemplate retrieves a template by ID and optional version
+  rpc GetTemplate(GetTemplateRequest) returns (Template);
+
+  // UpdateTemplate updates an existing template (creates new version)
+  rpc UpdateTemplate(UpdateTemplateRequest) returns (Template);
+
+  // DeleteTemplate soft-deletes a template
+  rpc DeleteTemplate(DeleteTemplateRequest) returns (DeleteTemplateResponse);
+
+  // ListTemplates lists templates with optional filters
+  rpc ListTemplates(ListTemplatesRequest) returns (ListTemplatesResponse);
+
+  // RenderPreview renders a template with sample data for preview
+  rpc RenderPreview(RenderPreviewRequest) returns (RenderPreviewResponse);
+
+  // ValidateTemplate validates template syntax without saving
+  rpc ValidateTemplate(ValidateTemplateRequest) returns (ValidationResult);
+}
