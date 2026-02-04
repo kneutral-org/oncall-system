@@ -1,0 +1,163 @@
+syntax = "proto3";
+
+package alerting.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/struct.proto";
+import "alerting/v1/alert.proto";
+
+option go_package = "github.com/kneutral-org/alerting-system/pkg/proto/alerting/v1;alertingv1";
+
+// AlertService provides alert management operations
+service AlertService {
+  // Create a new alert (typically from webhook)
+  rpc CreateAlert(CreateAlertRequest) returns (Alert);
+
+  // Get alert by ID
+  rpc GetAlert(GetAlertRequest) returns (Alert);
+
+  // List alerts with filters
+  rpc ListAlerts(ListAlertsRequest) returns (ListAlertsResponse);
+
+  // Update alert (limited fields)
+  rpc UpdateAlert(UpdateAlertRequest) returns (Alert);
+
+  // Acknowledge an alert
+  rpc AcknowledgeAlert(AcknowledgeAlertRequest) returns (Alert);
+
+  // Resolve an alert
+  rpc ResolveAlert(ResolveAlertRequest) returns (Alert);
+
+  // Escalate alert to policy
+  rpc EscalateAlert(EscalateAlertRequest) returns (Alert);
+
+  // Add note to alert
+  rpc AddNote(AddNoteRequest) returns (Alert);
+
+  // Get alert events/history
+  rpc GetAlertEvents(GetAlertEventsRequest) returns (GetAlertEventsResponse);
+
+  // Bulk acknowledge alerts
+  rpc BulkAcknowledgeAlerts(BulkAcknowledgeAlertsRequest) returns (BulkAcknowledgeAlertsResponse);
+
+  // Bulk resolve alerts
+  rpc BulkResolveAlerts(BulkResolveAlertsRequest) returns (BulkResolveAlertsResponse);
+}
+
+// Request/Response messages
+
+message CreateAlertRequest {
+  // For Alertmanager/Prometheus format
+  string summary = 1;
+  string details = 2;
+  Severity severity = 3;
+  AlertSource source = 4;
+  string service_id = 5;
+  map<string, string> labels = 6;
+  map<string, string> annotations = 7;
+
+  // Raw webhook payload for generic sources
+  google.protobuf.Struct raw_payload = 8;
+
+  // Optional fingerprint (auto-generated if not provided)
+  string fingerprint = 9;
+}
+
+message GetAlertRequest {
+  string id = 1;
+}
+
+message ListAlertsRequest {
+  // Pagination
+  int32 page_size = 1;
+  string page_token = 2;
+
+  // Filters
+  repeated AlertStatus statuses = 3;
+  repeated Severity severities = 4;
+  repeated AlertSource sources = 5;
+  string service_id = 6;
+  map<string, string> label_selectors = 7;  // key=value matchers
+
+  // Time range
+  google.protobuf.Timestamp triggered_after = 8;
+  google.protobuf.Timestamp triggered_before = 9;
+
+  // Search
+  string search_query = 10;  // Full-text search in summary/details
+
+  // Sorting
+  string order_by = 11;  // e.g., "triggered_at desc", "severity asc"
+}
+
+message ListAlertsResponse {
+  repeated Alert alerts = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+}
+
+message UpdateAlertRequest {
+  Alert alert = 1;
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message AcknowledgeAlertRequest {
+  string id = 1;
+  string user_id = 2;
+  string note = 3;  // Optional acknowledgment note
+}
+
+message ResolveAlertRequest {
+  string id = 1;
+  string user_id = 2;
+  string resolution_note = 3;
+}
+
+message EscalateAlertRequest {
+  string id = 1;
+  string escalation_policy_id = 2;
+  string user_id = 3;  // Who initiated escalation
+  bool skip_current_step = 4;  // Skip to next escalation step
+}
+
+message AddNoteRequest {
+  string alert_id = 1;
+  string content = 2;
+  string user_id = 3;
+}
+
+message GetAlertEventsRequest {
+  string alert_id = 1;
+  int32 page_size = 2;
+  string page_token = 3;
+}
+
+message GetAlertEventsResponse {
+  repeated AlertEvent events = 1;
+  string next_page_token = 2;
+}
+
+message BulkAcknowledgeAlertsRequest {
+  repeated string alert_ids = 1;
+  string user_id = 2;
+  string note = 3;
+}
+
+message BulkAcknowledgeAlertsResponse {
+  int32 acknowledged_count = 1;
+  repeated string failed_ids = 2;
+  repeated string failure_reasons = 3;
+}
+
+message BulkResolveAlertsRequest {
+  repeated string alert_ids = 1;
+  string user_id = 2;
+  string resolution_note = 3;
+}
+
+message BulkResolveAlertsResponse {
+  int32 resolved_count = 1;
+  repeated string failed_ids = 2;
+  repeated string failure_reasons = 3;
+}
