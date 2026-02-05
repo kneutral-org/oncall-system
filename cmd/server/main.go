@@ -14,6 +14,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 
+	"github.com/kneutral-org/alerting-system/internal/config"
+	"github.com/kneutral-org/alerting-system/internal/middleware"
 	"github.com/kneutral-org/alerting-system/internal/store"
 	"github.com/kneutral-org/alerting-system/internal/webhook"
 	alertingv1 "github.com/kneutral-org/alerting-system/pkg/proto/alerting/v1"
@@ -26,11 +28,14 @@ func main() {
 		Str("service", "alerting-system").
 		Logger()
 
-	// Get config from environment
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
+	// Load configuration
+	cfg := config.Load()
+
+	logger.Info().
+		Int64("webhookMaxPayloadSize", cfg.WebhookMaxPayloadSize).
+		Int64("adminMaxPayloadSize", cfg.AdminMaxPayloadSize).
+		Int("grpcMaxMessageSize", cfg.GRPCMaxMessageSize).
+		Msg("loaded configuration")
 
 	// Initialize stores (in-memory for now, replace with real implementations)
 	alertStore := NewInMemoryAlertStore()
@@ -52,7 +57,7 @@ func main() {
 	router.Use(gin.Recovery())
 	router.Use(ginLogger(logger))
 
-	// Health check endpoint
+	// Health check endpoint (no payload limit needed)
 	router.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "healthy"})
 	})
@@ -60,13 +65,23 @@ func main() {
 	// API v1 routes
 	apiV1 := router.Group("/api/v1")
 
+	// Webhook routes with 1MB payload limit
+	webhooksGroup := apiV1.Group("/webhook")
+	webhooksGroup.Use(middleware.PayloadLimitErrorHandler(logger))
+	webhooksGroup.Use(middleware.PayloadLimit(cfg.WebhookMaxPayloadSize, logger))
+
 	// Register webhook handlers
 	webhookHandler := webhook.NewHandler(alertStore, serviceStore, logger)
-	webhookHandler.RegisterRoutes(apiV1)
+	webhookHandler.RegisterWebhookRoutes(webhooksGroup)
+
+	// Admin routes with 100KB payload limit (placeholder for future admin endpoints)
+	adminGroup := apiV1.Group("/admin")
+	adminGroup.Use(middleware.PayloadLimitErrorHandler(logger))
+	adminGroup.Use(middleware.PayloadLimit(cfg.AdminMaxPayloadSize, logger))
 
 	// Create server
 	srv := &http.Server{
-		Addr:         ":" + port,
+		Addr:         ":" + cfg.Port,
 		Handler:      router,
 		ReadTimeout:  15 * time.Second,
 		WriteTimeout: 15 * time.Second,
@@ -75,7 +90,7 @@ func main() {
 
 	// Start server in a goroutine
 	go func() {
-		logger.Info().Str("port", port).Msg("starting HTTP server")
+		logger.Info().Str("port", cfg.Port).Msg("starting HTTP server")
 		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			logger.Fatal().Err(err).Msg("failed to start server")
 		}

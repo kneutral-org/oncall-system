@@ -27,8 +27,17 @@ func NewHandler(alertStore store.AlertStore, serviceStore store.ServiceStore, lo
 }
 
 // RegisterRoutes registers all webhook routes on the provided router group.
+// The routes will be created under /webhook/* path.
 func (h *Handler) RegisterRoutes(router *gin.RouterGroup) {
 	webhooks := router.Group("/webhook")
+	webhooks.POST("/alertmanager/:integration_key", h.AlertmanagerWebhook)
+	webhooks.POST("/grafana/:integration_key", h.GrafanaWebhook)
+	webhooks.POST("/generic/:integration_key", h.GenericWebhook)
+}
+
+// RegisterWebhookRoutes registers webhook handlers directly on the provided group.
+// Use this when the router group already has the webhook prefix and middleware applied.
+func (h *Handler) RegisterWebhookRoutes(webhooks *gin.RouterGroup) {
 	webhooks.POST("/alertmanager/:integration_key", h.AlertmanagerWebhook)
 	webhooks.POST("/grafana/:integration_key", h.GrafanaWebhook)
 	webhooks.POST("/generic/:integration_key", h.GenericWebhook)
