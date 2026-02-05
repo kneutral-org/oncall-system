@@ -1,0 +1,115 @@
+syntax = "proto3";
+
+package ticket.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/struct.proto";
+import "ticket/v1/ticket.proto";
+
+option go_package = "github.com/kneutral-org/alerting-system/pkg/proto/ticket/v1;ticketv1";
+
+// TicketService provides ticket management operations for external ticketing system integration.
+service TicketService {
+  // Provider management
+  rpc CreateTicketProvider(CreateTicketProviderRequest) returns (TicketProvider);
+  rpc GetTicketProvider(GetTicketProviderRequest) returns (TicketProvider);
+  rpc ListTicketProviders(ListTicketProvidersRequest) returns (ListTicketProvidersResponse);
+  rpc UpdateTicketProvider(UpdateTicketProviderRequest) returns (TicketProvider);
+  rpc DeleteTicketProvider(DeleteTicketProviderRequest) returns (DeleteTicketProviderResponse);
+  rpc TestTicketProvider(TestTicketProviderRequest) returns (TestTicketProviderResponse);
+
+  // Ticket management
+  rpc CreateTicket(CreateTicketRequest) returns (Ticket);
+  rpc GetTicket(GetTicketRequest) returns (Ticket);
+  rpc ListTickets(ListTicketsRequest) returns (ListTicketsResponse);
+  rpc UpdateTicket(UpdateTicketRequest) returns (Ticket);
+  rpc SyncTicketStatus(SyncTicketStatusRequest) returns (SyncTicketStatusResponse);
+}
+
+// Provider management requests/responses
+
+message CreateTicketProviderRequest {
+  TicketProvider provider = 1;
+}
+
+message GetTicketProviderRequest {
+  string id = 1;
+}
+
+message ListTicketProvidersRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+  bool enabled_only = 3;
+}
+
+message ListTicketProvidersResponse {
+  repeated TicketProvider providers = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+}
+
+message UpdateTicketProviderRequest {
+  TicketProvider provider = 1;
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteTicketProviderRequest {
+  string id = 1;
+}
+
+message DeleteTicketProviderResponse {
+  bool success = 1;
+}
+
+message TestTicketProviderRequest {
+  string id = 1;
+}
+
+message TestTicketProviderResponse {
+  bool success = 1;
+  string message = 2;
+  int64 latency_ms = 3;
+}
+
+// Ticket management requests/responses
+
+message CreateTicketRequest {
+  Ticket ticket = 1;
+}
+
+message GetTicketRequest {
+  string id = 1;
+}
+
+message ListTicketsRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+
+  // Filters
+  string provider_id = 3;
+  string alert_id = 4;
+  string status = 5;
+  string priority = 6;
+}
+
+message ListTicketsResponse {
+  repeated Ticket tickets = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+}
+
+message UpdateTicketRequest {
+  Ticket ticket = 1;
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message SyncTicketStatusRequest {
+  string id = 1;
+}
+
+message SyncTicketStatusResponse {
+  Ticket ticket = 1;
+  bool changed = 2;
+  string previous_status = 3;
+}

@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package ticket.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+option go_package = "github.com/kneutral-org/alerting-system/pkg/proto/ticket/v1;ticketv1";
+
+// TicketProvider represents a configured external ticketing system provider.
+message TicketProvider {
+  string id = 1;
+  string name = 2;
+  string type = 3;  // e.g., "jira", "servicenow", "salesforce"
+  string base_url = 4;
+  google.protobuf.Struct config = 5;  // Provider-specific configuration
+  bool enabled = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+// Ticket represents a ticket synchronized with an external ticketing system.
+message Ticket {
+  string id = 1;
+  string external_id = 2;  // ID in the external system
+  string provider_id = 3;
+  string project_key = 4;  // e.g., Jira project key
+  string ticket_type = 5;  // e.g., "incident", "bug", "task"
+  string title = 6;
+  string description = 7;
+  string status = 8;
+  string priority = 9;
+  string assignee = 10;
+  string alert_id = 11;  // Associated alert ID, if any
+  google.protobuf.Struct custom_fields = 12;
+  google.protobuf.Timestamp created_at = 13;
+  google.protobuf.Timestamp updated_at = 14;
+  google.protobuf.Timestamp synced_at = 15;  // Last sync with external system
+}
+
+// ProviderType enumerates the supported ticket provider types.
+enum ProviderType {
+  PROVIDER_TYPE_UNSPECIFIED = 0;
+  PROVIDER_TYPE_JIRA = 1;
+  PROVIDER_TYPE_SERVICENOW = 2;
+  PROVIDER_TYPE_SALESFORCE = 3;
+}
