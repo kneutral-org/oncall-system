@@ -6018,6 +6018,491 @@ func (x *DeleteCarrierResponse) GetSuccess() bool {
 	return false
 }
 
+// RateLimitConfig represents per-service rate limit configuration
+type RateLimitConfig struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	Id                string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	ServiceId         string                 `protobuf:"bytes,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+	RequestsPerMinute int32                  `protobuf:"varint,3,opt,name=requests_per_minute,json=requestsPerMinute,proto3" json:"requests_per_minute,omitempty"`
+	BurstSize         int32                  `protobuf:"varint,4,opt,name=burst_size,json=burstSize,proto3" json:"burst_size,omitempty"`
+	Enabled           bool                   `protobuf:"varint,5,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	CreatedAt         *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt         *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *RateLimitConfig) Reset() {
+	*x = RateLimitConfig{}
+	mi := &file_alerting_routing_v1_routing_service_proto_msgTypes[105]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RateLimitConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RateLimitConfig) ProtoMessage() {}
+
+func (x *RateLimitConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_alerting_routing_v1_routing_service_proto_msgTypes[105]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RateLimitConfig.ProtoReflect.Descriptor instead.
+func (*RateLimitConfig) Descriptor() ([]byte, []int) {
+	return file_alerting_routing_v1_routing_service_proto_rawDescGZIP(), []int{105}
+}
+
+func (x *RateLimitConfig) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *RateLimitConfig) GetServiceId() string {
+	if x != nil {
+		return x.ServiceId
+	}
+	return ""
+}
+
+func (x *RateLimitConfig) GetRequestsPerMinute() int32 {
+	if x != nil {
+		return x.RequestsPerMinute
+	}
+	return 0
+}
+
+func (x *RateLimitConfig) GetBurstSize() int32 {
+	if x != nil {
+		return x.BurstSize
+	}
+	return 0
+}
+
+func (x *RateLimitConfig) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *RateLimitConfig) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *RateLimitConfig) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
+type CreateRateLimitConfigRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Config        *RateLimitConfig       `protobuf:"bytes,1,opt,name=config,proto3" json:"config,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateRateLimitConfigRequest) Reset() {
+	*x = CreateRateLimitConfigRequest{}
+	mi := &file_alerting_routing_v1_routing_service_proto_msgTypes[106]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateRateLimitConfigRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateRateLimitConfigRequest) ProtoMessage() {}
+
+func (x *CreateRateLimitConfigRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_alerting_routing_v1_routing_service_proto_msgTypes[106]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateRateLimitConfigRequest.ProtoReflect.Descriptor instead.
+func (*CreateRateLimitConfigRequest) Descriptor() ([]byte, []int) {
+	return file_alerting_routing_v1_routing_service_proto_rawDescGZIP(), []int{106}
+}
+
+func (x *CreateRateLimitConfigRequest) GetConfig() *RateLimitConfig {
+	if x != nil {
+		return x.Config
+	}
+	return nil
+}
+
+type GetRateLimitConfigRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetRateLimitConfigRequest) Reset() {
+	*x = GetRateLimitConfigRequest{}
+	mi := &file_alerting_routing_v1_routing_service_proto_msgTypes[107]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetRateLimitConfigRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetRateLimitConfigRequest) ProtoMessage() {}
+
+func (x *GetRateLimitConfigRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_alerting_routing_v1_routing_service_proto_msgTypes[107]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetRateLimitConfigRequest.ProtoReflect.Descriptor instead.
+func (*GetRateLimitConfigRequest) Descriptor() ([]byte, []int) {
+	return file_alerting_routing_v1_routing_service_proto_rawDescGZIP(), []int{107}
+}
+
+func (x *GetRateLimitConfigRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type GetRateLimitConfigByServiceIDRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ServiceId     string                 `protobuf:"bytes,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetRateLimitConfigByServiceIDRequest) Reset() {
+	*x = GetRateLimitConfigByServiceIDRequest{}
+	mi := &file_alerting_routing_v1_routing_service_proto_msgTypes[108]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetRateLimitConfigByServiceIDRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetRateLimitConfigByServiceIDRequest) ProtoMessage() {}
+
+func (x *GetRateLimitConfigByServiceIDRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_alerting_routing_v1_routing_service_proto_msgTypes[108]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetRateLimitConfigByServiceIDRequest.ProtoReflect.Descriptor instead.
+func (*GetRateLimitConfigByServiceIDRequest) Descriptor() ([]byte, []int) {
+	return file_alerting_routing_v1_routing_service_proto_rawDescGZIP(), []int{108}
+}
+
+func (x *GetRateLimitConfigByServiceIDRequest) GetServiceId() string {
+	if x != nil {
+		return x.ServiceId
+	}
+	return ""
+}
+
+type ListRateLimitConfigsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PageSize      int32                  `protobuf:"varint,1,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	PageToken     string                 `protobuf:"bytes,2,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
+	EnabledOnly   bool                   `protobuf:"varint,3,opt,name=enabled_only,json=enabledOnly,proto3" json:"enabled_only,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListRateLimitConfigsRequest) Reset() {
+	*x = ListRateLimitConfigsRequest{}
+	mi := &file_alerting_routing_v1_routing_service_proto_msgTypes[109]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListRateLimitConfigsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListRateLimitConfigsRequest) ProtoMessage() {}
+
+func (x *ListRateLimitConfigsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_alerting_routing_v1_routing_service_proto_msgTypes[109]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListRateLimitConfigsRequest.ProtoReflect.Descriptor instead.
+func (*ListRateLimitConfigsRequest) Descriptor() ([]byte, []int) {
+	return file_alerting_routing_v1_routing_service_proto_rawDescGZIP(), []int{109}
+}
+
+func (x *ListRateLimitConfigsRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+func (x *ListRateLimitConfigsRequest) GetPageToken() string {
+	if x != nil {
+		return x.PageToken
+	}
+	return ""
+}
+
+func (x *ListRateLimitConfigsRequest) GetEnabledOnly() bool {
+	if x != nil {
+		return x.EnabledOnly
+	}
+	return false
+}
+
+type ListRateLimitConfigsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Configs       []*RateLimitConfig     `protobuf:"bytes,1,rep,name=configs,proto3" json:"configs,omitempty"`
+	NextPageToken string                 `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
+	TotalCount    int32                  `protobuf:"varint,3,opt,name=total_count,json=totalCount,proto3" json:"total_count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListRateLimitConfigsResponse) Reset() {
+	*x = ListRateLimitConfigsResponse{}
+	mi := &file_alerting_routing_v1_routing_service_proto_msgTypes[110]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListRateLimitConfigsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListRateLimitConfigsResponse) ProtoMessage() {}
+
+func (x *ListRateLimitConfigsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_alerting_routing_v1_routing_service_proto_msgTypes[110]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListRateLimitConfigsResponse.ProtoReflect.Descriptor instead.
+func (*ListRateLimitConfigsResponse) Descriptor() ([]byte, []int) {
+	return file_alerting_routing_v1_routing_service_proto_rawDescGZIP(), []int{110}
+}
+
+func (x *ListRateLimitConfigsResponse) GetConfigs() []*RateLimitConfig {
+	if x != nil {
+		return x.Configs
+	}
+	return nil
+}
+
+func (x *ListRateLimitConfigsResponse) GetNextPageToken() string {
+	if x != nil {
+		return x.NextPageToken
+	}
+	return ""
+}
+
+func (x *ListRateLimitConfigsResponse) GetTotalCount() int32 {
+	if x != nil {
+		return x.TotalCount
+	}
+	return 0
+}
+
+type UpdateRateLimitConfigRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Config        *RateLimitConfig       `protobuf:"bytes,1,opt,name=config,proto3" json:"config,omitempty"`
+	UpdateMask    *fieldmaskpb.FieldMask `protobuf:"bytes,2,opt,name=update_mask,json=updateMask,proto3" json:"update_mask,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateRateLimitConfigRequest) Reset() {
+	*x = UpdateRateLimitConfigRequest{}
+	mi := &file_alerting_routing_v1_routing_service_proto_msgTypes[111]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateRateLimitConfigRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateRateLimitConfigRequest) ProtoMessage() {}
+
+func (x *UpdateRateLimitConfigRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_alerting_routing_v1_routing_service_proto_msgTypes[111]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateRateLimitConfigRequest.ProtoReflect.Descriptor instead.
+func (*UpdateRateLimitConfigRequest) Descriptor() ([]byte, []int) {
+	return file_alerting_routing_v1_routing_service_proto_rawDescGZIP(), []int{111}
+}
+
+func (x *UpdateRateLimitConfigRequest) GetConfig() *RateLimitConfig {
+	if x != nil {
+		return x.Config
+	}
+	return nil
+}
+
+func (x *UpdateRateLimitConfigRequest) GetUpdateMask() *fieldmaskpb.FieldMask {
+	if x != nil {
+		return x.UpdateMask
+	}
+	return nil
+}
+
+type DeleteRateLimitConfigRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteRateLimitConfigRequest) Reset() {
+	*x = DeleteRateLimitConfigRequest{}
+	mi := &file_alerting_routing_v1_routing_service_proto_msgTypes[112]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteRateLimitConfigRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteRateLimitConfigRequest) ProtoMessage() {}
+
+func (x *DeleteRateLimitConfigRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_alerting_routing_v1_routing_service_proto_msgTypes[112]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteRateLimitConfigRequest.ProtoReflect.Descriptor instead.
+func (*DeleteRateLimitConfigRequest) Descriptor() ([]byte, []int) {
+	return file_alerting_routing_v1_routing_service_proto_rawDescGZIP(), []int{112}
+}
+
+func (x *DeleteRateLimitConfigRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type DeleteRateLimitConfigResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteRateLimitConfigResponse) Reset() {
+	*x = DeleteRateLimitConfigResponse{}
+	mi := &file_alerting_routing_v1_routing_service_proto_msgTypes[113]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteRateLimitConfigResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteRateLimitConfigResponse) ProtoMessage() {}
+
+func (x *DeleteRateLimitConfigResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_alerting_routing_v1_routing_service_proto_msgTypes[113]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteRateLimitConfigResponse.ProtoReflect.Descriptor instead.
+func (*DeleteRateLimitConfigResponse) Descriptor() ([]byte, []int) {
+	return file_alerting_routing_v1_routing_service_proto_rawDescGZIP(), []int{113}
+}
+
+func (x *DeleteRateLimitConfigResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
 var File_alerting_routing_v1_routing_service_proto protoreflect.FileDescriptor
 
 const file_alerting_routing_v1_routing_service_proto_rawDesc = "" +
@@ -6453,6 +6938,43 @@ const file_alerting_routing_v1_routing_service_proto_rawDesc = "" +
 	"\x14DeleteCarrierRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"1\n" +
 	"\x15DeleteCarrierResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"\x9f\x02\n" +
+	"\x0fRateLimitConfig\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1d\n" +
+	"\n" +
+	"service_id\x18\x02 \x01(\tR\tserviceId\x12.\n" +
+	"\x13requests_per_minute\x18\x03 \x01(\x05R\x11requestsPerMinute\x12\x1d\n" +
+	"\n" +
+	"burst_size\x18\x04 \x01(\x05R\tburstSize\x12\x18\n" +
+	"\aenabled\x18\x05 \x01(\bR\aenabled\x129\n" +
+	"\n" +
+	"created_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"\n" +
+	"updated_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\\\n" +
+	"\x1cCreateRateLimitConfigRequest\x12<\n" +
+	"\x06config\x18\x01 \x01(\v2$.alerting.routing.v1.RateLimitConfigR\x06config\"+\n" +
+	"\x19GetRateLimitConfigRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"E\n" +
+	"$GetRateLimitConfigByServiceIDRequest\x12\x1d\n" +
+	"\n" +
+	"service_id\x18\x01 \x01(\tR\tserviceId\"|\n" +
+	"\x1bListRateLimitConfigsRequest\x12\x1b\n" +
+	"\tpage_size\x18\x01 \x01(\x05R\bpageSize\x12\x1d\n" +
+	"\n" +
+	"page_token\x18\x02 \x01(\tR\tpageToken\x12!\n" +
+	"\fenabled_only\x18\x03 \x01(\bR\venabledOnly\"\xa7\x01\n" +
+	"\x1cListRateLimitConfigsResponse\x12>\n" +
+	"\aconfigs\x18\x01 \x03(\v2$.alerting.routing.v1.RateLimitConfigR\aconfigs\x12&\n" +
+	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken\x12\x1f\n" +
+	"\vtotal_count\x18\x03 \x01(\x05R\n" +
+	"totalCount\"\x99\x01\n" +
+	"\x1cUpdateRateLimitConfigRequest\x12<\n" +
+	"\x06config\x18\x01 \x01(\v2$.alerting.routing.v1.RateLimitConfigR\x06config\x12;\n" +
+	"\vupdate_mask\x18\x02 \x01(\v2\x1a.google.protobuf.FieldMaskR\n" +
+	"updateMask\".\n" +
+	"\x1cDeleteRateLimitConfigRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"9\n" +
+	"\x1dDeleteRateLimitConfigResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess*\x81\x01\n" +
 	"\vAlertStatus\x12\x1c\n" +
 	"\x18ALERT_STATUS_UNSPECIFIED\x10\x00\x12\x1a\n" +
@@ -6555,7 +7077,14 @@ const file_alerting_routing_v1_routing_service_proto_rawDesc = "" +
 	"\fListCarriers\x12(.alerting.routing.v1.ListCarriersRequest\x1a).alerting.routing.v1.ListCarriersResponse\x12^\n" +
 	"\rUpdateCarrier\x12).alerting.routing.v1.UpdateCarrierRequest\x1a\".alerting.routing.v1.CarrierConfig\x12f\n" +
 	"\rDeleteCarrier\x12).alerting.routing.v1.DeleteCarrierRequest\x1a*.alerting.routing.v1.DeleteCarrierResponse\x12b\n" +
-	"\x0fGetCarrierByASN\x12+.alerting.routing.v1.GetCarrierByASNRequest\x1a\".alerting.routing.v1.CarrierConfigB\xed\x01\n" +
+	"\x0fGetCarrierByASN\x12+.alerting.routing.v1.GetCarrierByASNRequest\x1a\".alerting.routing.v1.CarrierConfig2\xe2\x05\n" +
+	"\x10RateLimitService\x12p\n" +
+	"\x15CreateRateLimitConfig\x121.alerting.routing.v1.CreateRateLimitConfigRequest\x1a$.alerting.routing.v1.RateLimitConfig\x12j\n" +
+	"\x12GetRateLimitConfig\x12..alerting.routing.v1.GetRateLimitConfigRequest\x1a$.alerting.routing.v1.RateLimitConfig\x12\x80\x01\n" +
+	"\x1dGetRateLimitConfigByServiceID\x129.alerting.routing.v1.GetRateLimitConfigByServiceIDRequest\x1a$.alerting.routing.v1.RateLimitConfig\x12{\n" +
+	"\x14ListRateLimitConfigs\x120.alerting.routing.v1.ListRateLimitConfigsRequest\x1a1.alerting.routing.v1.ListRateLimitConfigsResponse\x12p\n" +
+	"\x15UpdateRateLimitConfig\x121.alerting.routing.v1.UpdateRateLimitConfigRequest\x1a$.alerting.routing.v1.RateLimitConfig\x12~\n" +
+	"\x15DeleteRateLimitConfig\x121.alerting.routing.v1.DeleteRateLimitConfigRequest\x1a2.alerting.routing.v1.DeleteRateLimitConfigResponseB\xed\x01\n" +
 	"\x17com.alerting.routing.v1B\x13RoutingServiceProtoP\x01ZOgithub.com/kneutral-org/alerting-system/pkg/proto/alerting/routing/v1;routingv1\xa2\x02\x03ARX\xaa\x02\x13Alerting.Routing.V1\xca\x02\x13Alerting\\Routing\\V1\xe2\x02\x1fAlerting\\Routing\\V1\\GPBMetadata\xea\x02\x15Alerting::Routing::V1b\x06proto3"
 
 var (
@@ -6571,380 +7100,407 @@ func file_alerting_routing_v1_routing_service_proto_rawDescGZIP() []byte {
 }
 
 var file_alerting_routing_v1_routing_service_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-var file_alerting_routing_v1_routing_service_proto_msgTypes = make([]protoimpl.MessageInfo, 110)
+var file_alerting_routing_v1_routing_service_proto_msgTypes = make([]protoimpl.MessageInfo, 119)
 var file_alerting_routing_v1_routing_service_proto_goTypes = []any{
-	(AlertStatus)(0),                            // 0: alerting.routing.v1.AlertStatus
-	(AlertSource)(0),                            // 1: alerting.routing.v1.AlertSource
-	(EscalationState)(0),                        // 2: alerting.routing.v1.EscalationState
-	(*CreateRoutingRuleRequest)(nil),            // 3: alerting.routing.v1.CreateRoutingRuleRequest
-	(*GetRoutingRuleRequest)(nil),               // 4: alerting.routing.v1.GetRoutingRuleRequest
-	(*ListRoutingRulesRequest)(nil),             // 5: alerting.routing.v1.ListRoutingRulesRequest
-	(*ListRoutingRulesResponse)(nil),            // 6: alerting.routing.v1.ListRoutingRulesResponse
-	(*UpdateRoutingRuleRequest)(nil),            // 7: alerting.routing.v1.UpdateRoutingRuleRequest
-	(*DeleteRoutingRuleRequest)(nil),            // 8: alerting.routing.v1.DeleteRoutingRuleRequest
-	(*DeleteRoutingRuleResponse)(nil),           // 9: alerting.routing.v1.DeleteRoutingRuleResponse
-	(*ReorderRoutingRulesRequest)(nil),          // 10: alerting.routing.v1.ReorderRoutingRulesRequest
-	(*ReorderRoutingRulesResponse)(nil),         // 11: alerting.routing.v1.ReorderRoutingRulesResponse
-	(*TestRoutingRuleRequest)(nil),              // 12: alerting.routing.v1.TestRoutingRuleRequest
-	(*TestRoutingRuleResponse)(nil),             // 13: alerting.routing.v1.TestRoutingRuleResponse
-	(*SimulateRoutingRequest)(nil),              // 14: alerting.routing.v1.SimulateRoutingRequest
-	(*SimulateRoutingResponse)(nil),             // 15: alerting.routing.v1.SimulateRoutingResponse
-	(*GetRoutingAuditLogsRequest)(nil),          // 16: alerting.routing.v1.GetRoutingAuditLogsRequest
-	(*GetRoutingAuditLogsResponse)(nil),         // 17: alerting.routing.v1.GetRoutingAuditLogsResponse
-	(*RouteAlertRequest)(nil),                   // 18: alerting.routing.v1.RouteAlertRequest
-	(*RouteAlertResponse)(nil),                  // 19: alerting.routing.v1.RouteAlertResponse
-	(*Alert)(nil),                               // 20: alerting.routing.v1.Alert
-	(*CreateTeamRequest)(nil),                   // 21: alerting.routing.v1.CreateTeamRequest
-	(*GetTeamRequest)(nil),                      // 22: alerting.routing.v1.GetTeamRequest
-	(*ListTeamsRequest)(nil),                    // 23: alerting.routing.v1.ListTeamsRequest
-	(*ListTeamsResponse)(nil),                   // 24: alerting.routing.v1.ListTeamsResponse
-	(*UpdateTeamRequest)(nil),                   // 25: alerting.routing.v1.UpdateTeamRequest
-	(*DeleteTeamRequest)(nil),                   // 26: alerting.routing.v1.DeleteTeamRequest
-	(*DeleteTeamResponse)(nil),                  // 27: alerting.routing.v1.DeleteTeamResponse
-	(*AddTeamMemberRequest)(nil),                // 28: alerting.routing.v1.AddTeamMemberRequest
-	(*RemoveTeamMemberRequest)(nil),             // 29: alerting.routing.v1.RemoveTeamMemberRequest
-	(*UpdateTeamMemberRequest)(nil),             // 30: alerting.routing.v1.UpdateTeamMemberRequest
-	(*GetUserTeamsRequest)(nil),                 // 31: alerting.routing.v1.GetUserTeamsRequest
-	(*CreateScheduleRequest)(nil),               // 32: alerting.routing.v1.CreateScheduleRequest
-	(*GetScheduleRequest)(nil),                  // 33: alerting.routing.v1.GetScheduleRequest
-	(*ListSchedulesRequest)(nil),                // 34: alerting.routing.v1.ListSchedulesRequest
-	(*ListSchedulesResponse)(nil),               // 35: alerting.routing.v1.ListSchedulesResponse
-	(*UpdateScheduleRequest)(nil),               // 36: alerting.routing.v1.UpdateScheduleRequest
-	(*DeleteScheduleRequest)(nil),               // 37: alerting.routing.v1.DeleteScheduleRequest
-	(*DeleteScheduleResponse)(nil),              // 38: alerting.routing.v1.DeleteScheduleResponse
-	(*AddRotationRequest)(nil),                  // 39: alerting.routing.v1.AddRotationRequest
-	(*UpdateRotationRequest)(nil),               // 40: alerting.routing.v1.UpdateRotationRequest
-	(*RemoveRotationRequest)(nil),               // 41: alerting.routing.v1.RemoveRotationRequest
-	(*CreateOverrideRequest)(nil),               // 42: alerting.routing.v1.CreateOverrideRequest
-	(*DeleteOverrideRequest)(nil),               // 43: alerting.routing.v1.DeleteOverrideRequest
-	(*DeleteOverrideResponse)(nil),              // 44: alerting.routing.v1.DeleteOverrideResponse
-	(*ListOverridesRequest)(nil),                // 45: alerting.routing.v1.ListOverridesRequest
-	(*ListOverridesResponse)(nil),               // 46: alerting.routing.v1.ListOverridesResponse
-	(*GetCurrentOnCallRequest)(nil),             // 47: alerting.routing.v1.GetCurrentOnCallRequest
-	(*GetCurrentOnCallResponse)(nil),            // 48: alerting.routing.v1.GetCurrentOnCallResponse
-	(*GetOnCallAtTimeRequest)(nil),              // 49: alerting.routing.v1.GetOnCallAtTimeRequest
-	(*GetOnCallAtTimeResponse)(nil),             // 50: alerting.routing.v1.GetOnCallAtTimeResponse
-	(*ListUpcomingShiftsRequest)(nil),           // 51: alerting.routing.v1.ListUpcomingShiftsRequest
-	(*ListUpcomingShiftsResponse)(nil),          // 52: alerting.routing.v1.ListUpcomingShiftsResponse
-	(*AcknowledgeHandoffRequest)(nil),           // 53: alerting.routing.v1.AcknowledgeHandoffRequest
-	(*AcknowledgeHandoffResponse)(nil),          // 54: alerting.routing.v1.AcknowledgeHandoffResponse
-	(*GetHandoffSummaryRequest)(nil),            // 55: alerting.routing.v1.GetHandoffSummaryRequest
-	(*HandoffSummary)(nil),                      // 56: alerting.routing.v1.HandoffSummary
-	(*TicketSummary)(nil),                       // 57: alerting.routing.v1.TicketSummary
-	(*Event)(nil),                               // 58: alerting.routing.v1.Event
-	(*CreateSiteRequest)(nil),                   // 59: alerting.routing.v1.CreateSiteRequest
-	(*GetSiteRequest)(nil),                      // 60: alerting.routing.v1.GetSiteRequest
-	(*GetSiteByCodeRequest)(nil),                // 61: alerting.routing.v1.GetSiteByCodeRequest
-	(*ListSitesRequest)(nil),                    // 62: alerting.routing.v1.ListSitesRequest
-	(*ListSitesResponse)(nil),                   // 63: alerting.routing.v1.ListSitesResponse
-	(*UpdateSiteRequest)(nil),                   // 64: alerting.routing.v1.UpdateSiteRequest
-	(*DeleteSiteRequest)(nil),                   // 65: alerting.routing.v1.DeleteSiteRequest
-	(*DeleteSiteResponse)(nil),                  // 66: alerting.routing.v1.DeleteSiteResponse
-	(*CreateMaintenanceWindowRequest)(nil),      // 67: alerting.routing.v1.CreateMaintenanceWindowRequest
-	(*GetMaintenanceWindowRequest)(nil),         // 68: alerting.routing.v1.GetMaintenanceWindowRequest
-	(*ListMaintenanceWindowsRequest)(nil),       // 69: alerting.routing.v1.ListMaintenanceWindowsRequest
-	(*ListMaintenanceWindowsResponse)(nil),      // 70: alerting.routing.v1.ListMaintenanceWindowsResponse
-	(*UpdateMaintenanceWindowRequest)(nil),      // 71: alerting.routing.v1.UpdateMaintenanceWindowRequest
-	(*DeleteMaintenanceWindowRequest)(nil),      // 72: alerting.routing.v1.DeleteMaintenanceWindowRequest
-	(*DeleteMaintenanceWindowResponse)(nil),     // 73: alerting.routing.v1.DeleteMaintenanceWindowResponse
-	(*ListActiveMaintenanceWindowsRequest)(nil), // 74: alerting.routing.v1.ListActiveMaintenanceWindowsRequest
-	(*CheckAlertMaintenanceRequest)(nil),        // 75: alerting.routing.v1.CheckAlertMaintenanceRequest
-	(*CheckAlertMaintenanceResponse)(nil),       // 76: alerting.routing.v1.CheckAlertMaintenanceResponse
-	(*CreateEscalationPolicyRequest)(nil),       // 77: alerting.routing.v1.CreateEscalationPolicyRequest
-	(*GetEscalationPolicyRequest)(nil),          // 78: alerting.routing.v1.GetEscalationPolicyRequest
-	(*ListEscalationPoliciesRequest)(nil),       // 79: alerting.routing.v1.ListEscalationPoliciesRequest
-	(*ListEscalationPoliciesResponse)(nil),      // 80: alerting.routing.v1.ListEscalationPoliciesResponse
-	(*UpdateEscalationPolicyRequest)(nil),       // 81: alerting.routing.v1.UpdateEscalationPolicyRequest
-	(*DeleteEscalationPolicyRequest)(nil),       // 82: alerting.routing.v1.DeleteEscalationPolicyRequest
-	(*DeleteEscalationPolicyResponse)(nil),      // 83: alerting.routing.v1.DeleteEscalationPolicyResponse
-	(*StartEscalationRequest)(nil),              // 84: alerting.routing.v1.StartEscalationRequest
-	(*StartEscalationResponse)(nil),             // 85: alerting.routing.v1.StartEscalationResponse
-	(*GetEscalationStatusRequest)(nil),          // 86: alerting.routing.v1.GetEscalationStatusRequest
-	(*EscalationStatus)(nil),                    // 87: alerting.routing.v1.EscalationStatus
-	(*EscalationStepResult)(nil),                // 88: alerting.routing.v1.EscalationStepResult
-	(*StopEscalationRequest)(nil),               // 89: alerting.routing.v1.StopEscalationRequest
-	(*StopEscalationResponse)(nil),              // 90: alerting.routing.v1.StopEscalationResponse
-	(*CreateCustomerTierRequest)(nil),           // 91: alerting.routing.v1.CreateCustomerTierRequest
-	(*GetCustomerTierRequest)(nil),              // 92: alerting.routing.v1.GetCustomerTierRequest
-	(*ListCustomerTiersRequest)(nil),            // 93: alerting.routing.v1.ListCustomerTiersRequest
-	(*ListCustomerTiersResponse)(nil),           // 94: alerting.routing.v1.ListCustomerTiersResponse
-	(*UpdateCustomerTierRequest)(nil),           // 95: alerting.routing.v1.UpdateCustomerTierRequest
-	(*DeleteCustomerTierRequest)(nil),           // 96: alerting.routing.v1.DeleteCustomerTierRequest
-	(*DeleteCustomerTierResponse)(nil),          // 97: alerting.routing.v1.DeleteCustomerTierResponse
-	(*ResolveCustomerTierRequest)(nil),          // 98: alerting.routing.v1.ResolveCustomerTierRequest
-	(*ResolveCustomerTierResponse)(nil),         // 99: alerting.routing.v1.ResolveCustomerTierResponse
-	(*CreateCarrierRequest)(nil),                // 100: alerting.routing.v1.CreateCarrierRequest
-	(*GetCarrierRequest)(nil),                   // 101: alerting.routing.v1.GetCarrierRequest
-	(*GetCarrierByASNRequest)(nil),              // 102: alerting.routing.v1.GetCarrierByASNRequest
-	(*ListCarriersRequest)(nil),                 // 103: alerting.routing.v1.ListCarriersRequest
-	(*ListCarriersResponse)(nil),                // 104: alerting.routing.v1.ListCarriersResponse
-	(*UpdateCarrierRequest)(nil),                // 105: alerting.routing.v1.UpdateCarrierRequest
-	(*DeleteCarrierRequest)(nil),                // 106: alerting.routing.v1.DeleteCarrierRequest
-	(*DeleteCarrierResponse)(nil),               // 107: alerting.routing.v1.DeleteCarrierResponse
-	nil,                                         // 108: alerting.routing.v1.ReorderRoutingRulesRequest.RulePrioritiesEntry
-	nil,                                         // 109: alerting.routing.v1.Alert.LabelsEntry
-	nil,                                         // 110: alerting.routing.v1.Alert.AnnotationsEntry
-	nil,                                         // 111: alerting.routing.v1.Event.MetadataEntry
-	nil,                                         // 112: alerting.routing.v1.ResolveCustomerTierRequest.LabelsEntry
-	(*RoutingRule)(nil),                         // 113: alerting.routing.v1.RoutingRule
-	(*fieldmaskpb.FieldMask)(nil),               // 114: google.protobuf.FieldMask
-	(*timestamppb.Timestamp)(nil),               // 115: google.protobuf.Timestamp
-	(*ConditionResult)(nil),                     // 116: alerting.routing.v1.ConditionResult
-	(*RoutingAction)(nil),                       // 117: alerting.routing.v1.RoutingAction
-	(*RuleEvaluation)(nil),                      // 118: alerting.routing.v1.RuleEvaluation
-	(*ActionExecution)(nil),                     // 119: alerting.routing.v1.ActionExecution
-	(*MaintenanceResult)(nil),                   // 120: alerting.routing.v1.MaintenanceResult
-	(*RoutingAuditLog)(nil),                     // 121: alerting.routing.v1.RoutingAuditLog
-	(*Team)(nil),                                // 122: alerting.routing.v1.Team
-	(*TeamMember)(nil),                          // 123: alerting.routing.v1.TeamMember
-	(*Schedule)(nil),                            // 124: alerting.routing.v1.Schedule
-	(*Rotation)(nil),                            // 125: alerting.routing.v1.Rotation
-	(*ScheduleOverride)(nil),                    // 126: alerting.routing.v1.ScheduleOverride
-	(*Shift)(nil),                               // 127: alerting.routing.v1.Shift
-	(*Site)(nil),                                // 128: alerting.routing.v1.Site
-	(SiteType)(0),                               // 129: alerting.routing.v1.SiteType
-	(*MaintenanceWindow)(nil),                   // 130: alerting.routing.v1.MaintenanceWindow
-	(MaintenanceStatus)(0),                      // 131: alerting.routing.v1.MaintenanceStatus
-	(MaintenanceAction)(0),                      // 132: alerting.routing.v1.MaintenanceAction
-	(*EscalationPolicy)(nil),                    // 133: alerting.routing.v1.EscalationPolicy
-	(*CustomerTier)(nil),                        // 134: alerting.routing.v1.CustomerTier
-	(*CarrierConfig)(nil),                       // 135: alerting.routing.v1.CarrierConfig
+	(AlertStatus)(0),                             // 0: alerting.routing.v1.AlertStatus
+	(AlertSource)(0),                             // 1: alerting.routing.v1.AlertSource
+	(EscalationState)(0),                         // 2: alerting.routing.v1.EscalationState
+	(*CreateRoutingRuleRequest)(nil),             // 3: alerting.routing.v1.CreateRoutingRuleRequest
+	(*GetRoutingRuleRequest)(nil),                // 4: alerting.routing.v1.GetRoutingRuleRequest
+	(*ListRoutingRulesRequest)(nil),              // 5: alerting.routing.v1.ListRoutingRulesRequest
+	(*ListRoutingRulesResponse)(nil),             // 6: alerting.routing.v1.ListRoutingRulesResponse
+	(*UpdateRoutingRuleRequest)(nil),             // 7: alerting.routing.v1.UpdateRoutingRuleRequest
+	(*DeleteRoutingRuleRequest)(nil),             // 8: alerting.routing.v1.DeleteRoutingRuleRequest
+	(*DeleteRoutingRuleResponse)(nil),            // 9: alerting.routing.v1.DeleteRoutingRuleResponse
+	(*ReorderRoutingRulesRequest)(nil),           // 10: alerting.routing.v1.ReorderRoutingRulesRequest
+	(*ReorderRoutingRulesResponse)(nil),          // 11: alerting.routing.v1.ReorderRoutingRulesResponse
+	(*TestRoutingRuleRequest)(nil),               // 12: alerting.routing.v1.TestRoutingRuleRequest
+	(*TestRoutingRuleResponse)(nil),              // 13: alerting.routing.v1.TestRoutingRuleResponse
+	(*SimulateRoutingRequest)(nil),               // 14: alerting.routing.v1.SimulateRoutingRequest
+	(*SimulateRoutingResponse)(nil),              // 15: alerting.routing.v1.SimulateRoutingResponse
+	(*GetRoutingAuditLogsRequest)(nil),           // 16: alerting.routing.v1.GetRoutingAuditLogsRequest
+	(*GetRoutingAuditLogsResponse)(nil),          // 17: alerting.routing.v1.GetRoutingAuditLogsResponse
+	(*RouteAlertRequest)(nil),                    // 18: alerting.routing.v1.RouteAlertRequest
+	(*RouteAlertResponse)(nil),                   // 19: alerting.routing.v1.RouteAlertResponse
+	(*Alert)(nil),                                // 20: alerting.routing.v1.Alert
+	(*CreateTeamRequest)(nil),                    // 21: alerting.routing.v1.CreateTeamRequest
+	(*GetTeamRequest)(nil),                       // 22: alerting.routing.v1.GetTeamRequest
+	(*ListTeamsRequest)(nil),                     // 23: alerting.routing.v1.ListTeamsRequest
+	(*ListTeamsResponse)(nil),                    // 24: alerting.routing.v1.ListTeamsResponse
+	(*UpdateTeamRequest)(nil),                    // 25: alerting.routing.v1.UpdateTeamRequest
+	(*DeleteTeamRequest)(nil),                    // 26: alerting.routing.v1.DeleteTeamRequest
+	(*DeleteTeamResponse)(nil),                   // 27: alerting.routing.v1.DeleteTeamResponse
+	(*AddTeamMemberRequest)(nil),                 // 28: alerting.routing.v1.AddTeamMemberRequest
+	(*RemoveTeamMemberRequest)(nil),              // 29: alerting.routing.v1.RemoveTeamMemberRequest
+	(*UpdateTeamMemberRequest)(nil),              // 30: alerting.routing.v1.UpdateTeamMemberRequest
+	(*GetUserTeamsRequest)(nil),                  // 31: alerting.routing.v1.GetUserTeamsRequest
+	(*CreateScheduleRequest)(nil),                // 32: alerting.routing.v1.CreateScheduleRequest
+	(*GetScheduleRequest)(nil),                   // 33: alerting.routing.v1.GetScheduleRequest
+	(*ListSchedulesRequest)(nil),                 // 34: alerting.routing.v1.ListSchedulesRequest
+	(*ListSchedulesResponse)(nil),                // 35: alerting.routing.v1.ListSchedulesResponse
+	(*UpdateScheduleRequest)(nil),                // 36: alerting.routing.v1.UpdateScheduleRequest
+	(*DeleteScheduleRequest)(nil),                // 37: alerting.routing.v1.DeleteScheduleRequest
+	(*DeleteScheduleResponse)(nil),               // 38: alerting.routing.v1.DeleteScheduleResponse
+	(*AddRotationRequest)(nil),                   // 39: alerting.routing.v1.AddRotationRequest
+	(*UpdateRotationRequest)(nil),                // 40: alerting.routing.v1.UpdateRotationRequest
+	(*RemoveRotationRequest)(nil),                // 41: alerting.routing.v1.RemoveRotationRequest
+	(*CreateOverrideRequest)(nil),                // 42: alerting.routing.v1.CreateOverrideRequest
+	(*DeleteOverrideRequest)(nil),                // 43: alerting.routing.v1.DeleteOverrideRequest
+	(*DeleteOverrideResponse)(nil),               // 44: alerting.routing.v1.DeleteOverrideResponse
+	(*ListOverridesRequest)(nil),                 // 45: alerting.routing.v1.ListOverridesRequest
+	(*ListOverridesResponse)(nil),                // 46: alerting.routing.v1.ListOverridesResponse
+	(*GetCurrentOnCallRequest)(nil),              // 47: alerting.routing.v1.GetCurrentOnCallRequest
+	(*GetCurrentOnCallResponse)(nil),             // 48: alerting.routing.v1.GetCurrentOnCallResponse
+	(*GetOnCallAtTimeRequest)(nil),               // 49: alerting.routing.v1.GetOnCallAtTimeRequest
+	(*GetOnCallAtTimeResponse)(nil),              // 50: alerting.routing.v1.GetOnCallAtTimeResponse
+	(*ListUpcomingShiftsRequest)(nil),            // 51: alerting.routing.v1.ListUpcomingShiftsRequest
+	(*ListUpcomingShiftsResponse)(nil),           // 52: alerting.routing.v1.ListUpcomingShiftsResponse
+	(*AcknowledgeHandoffRequest)(nil),            // 53: alerting.routing.v1.AcknowledgeHandoffRequest
+	(*AcknowledgeHandoffResponse)(nil),           // 54: alerting.routing.v1.AcknowledgeHandoffResponse
+	(*GetHandoffSummaryRequest)(nil),             // 55: alerting.routing.v1.GetHandoffSummaryRequest
+	(*HandoffSummary)(nil),                       // 56: alerting.routing.v1.HandoffSummary
+	(*TicketSummary)(nil),                        // 57: alerting.routing.v1.TicketSummary
+	(*Event)(nil),                                // 58: alerting.routing.v1.Event
+	(*CreateSiteRequest)(nil),                    // 59: alerting.routing.v1.CreateSiteRequest
+	(*GetSiteRequest)(nil),                       // 60: alerting.routing.v1.GetSiteRequest
+	(*GetSiteByCodeRequest)(nil),                 // 61: alerting.routing.v1.GetSiteByCodeRequest
+	(*ListSitesRequest)(nil),                     // 62: alerting.routing.v1.ListSitesRequest
+	(*ListSitesResponse)(nil),                    // 63: alerting.routing.v1.ListSitesResponse
+	(*UpdateSiteRequest)(nil),                    // 64: alerting.routing.v1.UpdateSiteRequest
+	(*DeleteSiteRequest)(nil),                    // 65: alerting.routing.v1.DeleteSiteRequest
+	(*DeleteSiteResponse)(nil),                   // 66: alerting.routing.v1.DeleteSiteResponse
+	(*CreateMaintenanceWindowRequest)(nil),       // 67: alerting.routing.v1.CreateMaintenanceWindowRequest
+	(*GetMaintenanceWindowRequest)(nil),          // 68: alerting.routing.v1.GetMaintenanceWindowRequest
+	(*ListMaintenanceWindowsRequest)(nil),        // 69: alerting.routing.v1.ListMaintenanceWindowsRequest
+	(*ListMaintenanceWindowsResponse)(nil),       // 70: alerting.routing.v1.ListMaintenanceWindowsResponse
+	(*UpdateMaintenanceWindowRequest)(nil),       // 71: alerting.routing.v1.UpdateMaintenanceWindowRequest
+	(*DeleteMaintenanceWindowRequest)(nil),       // 72: alerting.routing.v1.DeleteMaintenanceWindowRequest
+	(*DeleteMaintenanceWindowResponse)(nil),      // 73: alerting.routing.v1.DeleteMaintenanceWindowResponse
+	(*ListActiveMaintenanceWindowsRequest)(nil),  // 74: alerting.routing.v1.ListActiveMaintenanceWindowsRequest
+	(*CheckAlertMaintenanceRequest)(nil),         // 75: alerting.routing.v1.CheckAlertMaintenanceRequest
+	(*CheckAlertMaintenanceResponse)(nil),        // 76: alerting.routing.v1.CheckAlertMaintenanceResponse
+	(*CreateEscalationPolicyRequest)(nil),        // 77: alerting.routing.v1.CreateEscalationPolicyRequest
+	(*GetEscalationPolicyRequest)(nil),           // 78: alerting.routing.v1.GetEscalationPolicyRequest
+	(*ListEscalationPoliciesRequest)(nil),        // 79: alerting.routing.v1.ListEscalationPoliciesRequest
+	(*ListEscalationPoliciesResponse)(nil),       // 80: alerting.routing.v1.ListEscalationPoliciesResponse
+	(*UpdateEscalationPolicyRequest)(nil),        // 81: alerting.routing.v1.UpdateEscalationPolicyRequest
+	(*DeleteEscalationPolicyRequest)(nil),        // 82: alerting.routing.v1.DeleteEscalationPolicyRequest
+	(*DeleteEscalationPolicyResponse)(nil),       // 83: alerting.routing.v1.DeleteEscalationPolicyResponse
+	(*StartEscalationRequest)(nil),               // 84: alerting.routing.v1.StartEscalationRequest
+	(*StartEscalationResponse)(nil),              // 85: alerting.routing.v1.StartEscalationResponse
+	(*GetEscalationStatusRequest)(nil),           // 86: alerting.routing.v1.GetEscalationStatusRequest
+	(*EscalationStatus)(nil),                     // 87: alerting.routing.v1.EscalationStatus
+	(*EscalationStepResult)(nil),                 // 88: alerting.routing.v1.EscalationStepResult
+	(*StopEscalationRequest)(nil),                // 89: alerting.routing.v1.StopEscalationRequest
+	(*StopEscalationResponse)(nil),               // 90: alerting.routing.v1.StopEscalationResponse
+	(*CreateCustomerTierRequest)(nil),            // 91: alerting.routing.v1.CreateCustomerTierRequest
+	(*GetCustomerTierRequest)(nil),               // 92: alerting.routing.v1.GetCustomerTierRequest
+	(*ListCustomerTiersRequest)(nil),             // 93: alerting.routing.v1.ListCustomerTiersRequest
+	(*ListCustomerTiersResponse)(nil),            // 94: alerting.routing.v1.ListCustomerTiersResponse
+	(*UpdateCustomerTierRequest)(nil),            // 95: alerting.routing.v1.UpdateCustomerTierRequest
+	(*DeleteCustomerTierRequest)(nil),            // 96: alerting.routing.v1.DeleteCustomerTierRequest
+	(*DeleteCustomerTierResponse)(nil),           // 97: alerting.routing.v1.DeleteCustomerTierResponse
+	(*ResolveCustomerTierRequest)(nil),           // 98: alerting.routing.v1.ResolveCustomerTierRequest
+	(*ResolveCustomerTierResponse)(nil),          // 99: alerting.routing.v1.ResolveCustomerTierResponse
+	(*CreateCarrierRequest)(nil),                 // 100: alerting.routing.v1.CreateCarrierRequest
+	(*GetCarrierRequest)(nil),                    // 101: alerting.routing.v1.GetCarrierRequest
+	(*GetCarrierByASNRequest)(nil),               // 102: alerting.routing.v1.GetCarrierByASNRequest
+	(*ListCarriersRequest)(nil),                  // 103: alerting.routing.v1.ListCarriersRequest
+	(*ListCarriersResponse)(nil),                 // 104: alerting.routing.v1.ListCarriersResponse
+	(*UpdateCarrierRequest)(nil),                 // 105: alerting.routing.v1.UpdateCarrierRequest
+	(*DeleteCarrierRequest)(nil),                 // 106: alerting.routing.v1.DeleteCarrierRequest
+	(*DeleteCarrierResponse)(nil),                // 107: alerting.routing.v1.DeleteCarrierResponse
+	(*RateLimitConfig)(nil),                      // 108: alerting.routing.v1.RateLimitConfig
+	(*CreateRateLimitConfigRequest)(nil),         // 109: alerting.routing.v1.CreateRateLimitConfigRequest
+	(*GetRateLimitConfigRequest)(nil),            // 110: alerting.routing.v1.GetRateLimitConfigRequest
+	(*GetRateLimitConfigByServiceIDRequest)(nil), // 111: alerting.routing.v1.GetRateLimitConfigByServiceIDRequest
+	(*ListRateLimitConfigsRequest)(nil),          // 112: alerting.routing.v1.ListRateLimitConfigsRequest
+	(*ListRateLimitConfigsResponse)(nil),         // 113: alerting.routing.v1.ListRateLimitConfigsResponse
+	(*UpdateRateLimitConfigRequest)(nil),         // 114: alerting.routing.v1.UpdateRateLimitConfigRequest
+	(*DeleteRateLimitConfigRequest)(nil),         // 115: alerting.routing.v1.DeleteRateLimitConfigRequest
+	(*DeleteRateLimitConfigResponse)(nil),        // 116: alerting.routing.v1.DeleteRateLimitConfigResponse
+	nil,                                          // 117: alerting.routing.v1.ReorderRoutingRulesRequest.RulePrioritiesEntry
+	nil,                                          // 118: alerting.routing.v1.Alert.LabelsEntry
+	nil,                                          // 119: alerting.routing.v1.Alert.AnnotationsEntry
+	nil,                                          // 120: alerting.routing.v1.Event.MetadataEntry
+	nil,                                          // 121: alerting.routing.v1.ResolveCustomerTierRequest.LabelsEntry
+	(*RoutingRule)(nil),                          // 122: alerting.routing.v1.RoutingRule
+	(*fieldmaskpb.FieldMask)(nil),                // 123: google.protobuf.FieldMask
+	(*timestamppb.Timestamp)(nil),                // 124: google.protobuf.Timestamp
+	(*ConditionResult)(nil),                      // 125: alerting.routing.v1.ConditionResult
+	(*RoutingAction)(nil),                        // 126: alerting.routing.v1.RoutingAction
+	(*RuleEvaluation)(nil),                       // 127: alerting.routing.v1.RuleEvaluation
+	(*ActionExecution)(nil),                      // 128: alerting.routing.v1.ActionExecution
+	(*MaintenanceResult)(nil),                    // 129: alerting.routing.v1.MaintenanceResult
+	(*RoutingAuditLog)(nil),                      // 130: alerting.routing.v1.RoutingAuditLog
+	(*Team)(nil),                                 // 131: alerting.routing.v1.Team
+	(*TeamMember)(nil),                           // 132: alerting.routing.v1.TeamMember
+	(*Schedule)(nil),                             // 133: alerting.routing.v1.Schedule
+	(*Rotation)(nil),                             // 134: alerting.routing.v1.Rotation
+	(*ScheduleOverride)(nil),                     // 135: alerting.routing.v1.ScheduleOverride
+	(*Shift)(nil),                                // 136: alerting.routing.v1.Shift
+	(*Site)(nil),                                 // 137: alerting.routing.v1.Site
+	(SiteType)(0),                                // 138: alerting.routing.v1.SiteType
+	(*MaintenanceWindow)(nil),                    // 139: alerting.routing.v1.MaintenanceWindow
+	(MaintenanceStatus)(0),                       // 140: alerting.routing.v1.MaintenanceStatus
+	(MaintenanceAction)(0),                       // 141: alerting.routing.v1.MaintenanceAction
+	(*EscalationPolicy)(nil),                     // 142: alerting.routing.v1.EscalationPolicy
+	(*CustomerTier)(nil),                         // 143: alerting.routing.v1.CustomerTier
+	(*CarrierConfig)(nil),                        // 144: alerting.routing.v1.CarrierConfig
 }
 var file_alerting_routing_v1_routing_service_proto_depIdxs = []int32{
-	113, // 0: alerting.routing.v1.CreateRoutingRuleRequest.rule:type_name -> alerting.routing.v1.RoutingRule
-	113, // 1: alerting.routing.v1.ListRoutingRulesResponse.rules:type_name -> alerting.routing.v1.RoutingRule
-	113, // 2: alerting.routing.v1.UpdateRoutingRuleRequest.rule:type_name -> alerting.routing.v1.RoutingRule
-	114, // 3: alerting.routing.v1.UpdateRoutingRuleRequest.update_mask:type_name -> google.protobuf.FieldMask
-	108, // 4: alerting.routing.v1.ReorderRoutingRulesRequest.rule_priorities:type_name -> alerting.routing.v1.ReorderRoutingRulesRequest.RulePrioritiesEntry
-	113, // 5: alerting.routing.v1.ReorderRoutingRulesResponse.updated_rules:type_name -> alerting.routing.v1.RoutingRule
-	113, // 6: alerting.routing.v1.TestRoutingRuleRequest.rule:type_name -> alerting.routing.v1.RoutingRule
+	122, // 0: alerting.routing.v1.CreateRoutingRuleRequest.rule:type_name -> alerting.routing.v1.RoutingRule
+	122, // 1: alerting.routing.v1.ListRoutingRulesResponse.rules:type_name -> alerting.routing.v1.RoutingRule
+	122, // 2: alerting.routing.v1.UpdateRoutingRuleRequest.rule:type_name -> alerting.routing.v1.RoutingRule
+	123, // 3: alerting.routing.v1.UpdateRoutingRuleRequest.update_mask:type_name -> google.protobuf.FieldMask
+	117, // 4: alerting.routing.v1.ReorderRoutingRulesRequest.rule_priorities:type_name -> alerting.routing.v1.ReorderRoutingRulesRequest.RulePrioritiesEntry
+	122, // 5: alerting.routing.v1.ReorderRoutingRulesResponse.updated_rules:type_name -> alerting.routing.v1.RoutingRule
+	122, // 6: alerting.routing.v1.TestRoutingRuleRequest.rule:type_name -> alerting.routing.v1.RoutingRule
 	20,  // 7: alerting.routing.v1.TestRoutingRuleRequest.sample_alert:type_name -> alerting.routing.v1.Alert
-	115, // 8: alerting.routing.v1.TestRoutingRuleRequest.simulate_time:type_name -> google.protobuf.Timestamp
-	116, // 9: alerting.routing.v1.TestRoutingRuleResponse.condition_results:type_name -> alerting.routing.v1.ConditionResult
-	117, // 10: alerting.routing.v1.TestRoutingRuleResponse.matched_actions:type_name -> alerting.routing.v1.RoutingAction
+	124, // 8: alerting.routing.v1.TestRoutingRuleRequest.simulate_time:type_name -> google.protobuf.Timestamp
+	125, // 9: alerting.routing.v1.TestRoutingRuleResponse.condition_results:type_name -> alerting.routing.v1.ConditionResult
+	126, // 10: alerting.routing.v1.TestRoutingRuleResponse.matched_actions:type_name -> alerting.routing.v1.RoutingAction
 	20,  // 11: alerting.routing.v1.SimulateRoutingRequest.alert:type_name -> alerting.routing.v1.Alert
-	115, // 12: alerting.routing.v1.SimulateRoutingRequest.simulate_time:type_name -> google.protobuf.Timestamp
-	118, // 13: alerting.routing.v1.SimulateRoutingResponse.evaluations:type_name -> alerting.routing.v1.RuleEvaluation
-	119, // 14: alerting.routing.v1.SimulateRoutingResponse.actions:type_name -> alerting.routing.v1.ActionExecution
-	120, // 15: alerting.routing.v1.SimulateRoutingResponse.maintenance_result:type_name -> alerting.routing.v1.MaintenanceResult
-	115, // 16: alerting.routing.v1.GetRoutingAuditLogsRequest.start_time:type_name -> google.protobuf.Timestamp
-	115, // 17: alerting.routing.v1.GetRoutingAuditLogsRequest.end_time:type_name -> google.protobuf.Timestamp
-	121, // 18: alerting.routing.v1.GetRoutingAuditLogsResponse.logs:type_name -> alerting.routing.v1.RoutingAuditLog
+	124, // 12: alerting.routing.v1.SimulateRoutingRequest.simulate_time:type_name -> google.protobuf.Timestamp
+	127, // 13: alerting.routing.v1.SimulateRoutingResponse.evaluations:type_name -> alerting.routing.v1.RuleEvaluation
+	128, // 14: alerting.routing.v1.SimulateRoutingResponse.actions:type_name -> alerting.routing.v1.ActionExecution
+	129, // 15: alerting.routing.v1.SimulateRoutingResponse.maintenance_result:type_name -> alerting.routing.v1.MaintenanceResult
+	124, // 16: alerting.routing.v1.GetRoutingAuditLogsRequest.start_time:type_name -> google.protobuf.Timestamp
+	124, // 17: alerting.routing.v1.GetRoutingAuditLogsRequest.end_time:type_name -> google.protobuf.Timestamp
+	130, // 18: alerting.routing.v1.GetRoutingAuditLogsResponse.logs:type_name -> alerting.routing.v1.RoutingAuditLog
 	20,  // 19: alerting.routing.v1.RouteAlertRequest.alert:type_name -> alerting.routing.v1.Alert
-	121, // 20: alerting.routing.v1.RouteAlertResponse.audit_log:type_name -> alerting.routing.v1.RoutingAuditLog
+	130, // 20: alerting.routing.v1.RouteAlertResponse.audit_log:type_name -> alerting.routing.v1.RoutingAuditLog
 	0,   // 21: alerting.routing.v1.Alert.status:type_name -> alerting.routing.v1.AlertStatus
 	1,   // 22: alerting.routing.v1.Alert.source:type_name -> alerting.routing.v1.AlertSource
-	109, // 23: alerting.routing.v1.Alert.labels:type_name -> alerting.routing.v1.Alert.LabelsEntry
-	110, // 24: alerting.routing.v1.Alert.annotations:type_name -> alerting.routing.v1.Alert.AnnotationsEntry
-	115, // 25: alerting.routing.v1.Alert.created_at:type_name -> google.protobuf.Timestamp
-	122, // 26: alerting.routing.v1.CreateTeamRequest.team:type_name -> alerting.routing.v1.Team
-	122, // 27: alerting.routing.v1.ListTeamsResponse.teams:type_name -> alerting.routing.v1.Team
-	122, // 28: alerting.routing.v1.UpdateTeamRequest.team:type_name -> alerting.routing.v1.Team
-	114, // 29: alerting.routing.v1.UpdateTeamRequest.update_mask:type_name -> google.protobuf.FieldMask
-	123, // 30: alerting.routing.v1.AddTeamMemberRequest.member:type_name -> alerting.routing.v1.TeamMember
-	123, // 31: alerting.routing.v1.UpdateTeamMemberRequest.member:type_name -> alerting.routing.v1.TeamMember
-	114, // 32: alerting.routing.v1.UpdateTeamMemberRequest.update_mask:type_name -> google.protobuf.FieldMask
-	124, // 33: alerting.routing.v1.CreateScheduleRequest.schedule:type_name -> alerting.routing.v1.Schedule
-	124, // 34: alerting.routing.v1.ListSchedulesResponse.schedules:type_name -> alerting.routing.v1.Schedule
-	124, // 35: alerting.routing.v1.UpdateScheduleRequest.schedule:type_name -> alerting.routing.v1.Schedule
-	114, // 36: alerting.routing.v1.UpdateScheduleRequest.update_mask:type_name -> google.protobuf.FieldMask
-	125, // 37: alerting.routing.v1.AddRotationRequest.rotation:type_name -> alerting.routing.v1.Rotation
-	125, // 38: alerting.routing.v1.UpdateRotationRequest.rotation:type_name -> alerting.routing.v1.Rotation
-	114, // 39: alerting.routing.v1.UpdateRotationRequest.update_mask:type_name -> google.protobuf.FieldMask
-	126, // 40: alerting.routing.v1.CreateOverrideRequest.override:type_name -> alerting.routing.v1.ScheduleOverride
-	115, // 41: alerting.routing.v1.ListOverridesRequest.start_time:type_name -> google.protobuf.Timestamp
-	115, // 42: alerting.routing.v1.ListOverridesRequest.end_time:type_name -> google.protobuf.Timestamp
-	126, // 43: alerting.routing.v1.ListOverridesResponse.overrides:type_name -> alerting.routing.v1.ScheduleOverride
-	127, // 44: alerting.routing.v1.GetCurrentOnCallResponse.current_shift:type_name -> alerting.routing.v1.Shift
-	115, // 45: alerting.routing.v1.GetCurrentOnCallResponse.next_handoff:type_name -> google.protobuf.Timestamp
-	115, // 46: alerting.routing.v1.GetOnCallAtTimeRequest.time:type_name -> google.protobuf.Timestamp
-	127, // 47: alerting.routing.v1.GetOnCallAtTimeResponse.shift:type_name -> alerting.routing.v1.Shift
-	115, // 48: alerting.routing.v1.ListUpcomingShiftsRequest.until:type_name -> google.protobuf.Timestamp
-	127, // 49: alerting.routing.v1.ListUpcomingShiftsResponse.shifts:type_name -> alerting.routing.v1.Shift
-	127, // 50: alerting.routing.v1.AcknowledgeHandoffResponse.shift:type_name -> alerting.routing.v1.Shift
-	115, // 51: alerting.routing.v1.HandoffSummary.handoff_time:type_name -> google.protobuf.Timestamp
+	118, // 23: alerting.routing.v1.Alert.labels:type_name -> alerting.routing.v1.Alert.LabelsEntry
+	119, // 24: alerting.routing.v1.Alert.annotations:type_name -> alerting.routing.v1.Alert.AnnotationsEntry
+	124, // 25: alerting.routing.v1.Alert.created_at:type_name -> google.protobuf.Timestamp
+	131, // 26: alerting.routing.v1.CreateTeamRequest.team:type_name -> alerting.routing.v1.Team
+	131, // 27: alerting.routing.v1.ListTeamsResponse.teams:type_name -> alerting.routing.v1.Team
+	131, // 28: alerting.routing.v1.UpdateTeamRequest.team:type_name -> alerting.routing.v1.Team
+	123, // 29: alerting.routing.v1.UpdateTeamRequest.update_mask:type_name -> google.protobuf.FieldMask
+	132, // 30: alerting.routing.v1.AddTeamMemberRequest.member:type_name -> alerting.routing.v1.TeamMember
+	132, // 31: alerting.routing.v1.UpdateTeamMemberRequest.member:type_name -> alerting.routing.v1.TeamMember
+	123, // 32: alerting.routing.v1.UpdateTeamMemberRequest.update_mask:type_name -> google.protobuf.FieldMask
+	133, // 33: alerting.routing.v1.CreateScheduleRequest.schedule:type_name -> alerting.routing.v1.Schedule
+	133, // 34: alerting.routing.v1.ListSchedulesResponse.schedules:type_name -> alerting.routing.v1.Schedule
+	133, // 35: alerting.routing.v1.UpdateScheduleRequest.schedule:type_name -> alerting.routing.v1.Schedule
+	123, // 36: alerting.routing.v1.UpdateScheduleRequest.update_mask:type_name -> google.protobuf.FieldMask
+	134, // 37: alerting.routing.v1.AddRotationRequest.rotation:type_name -> alerting.routing.v1.Rotation
+	134, // 38: alerting.routing.v1.UpdateRotationRequest.rotation:type_name -> alerting.routing.v1.Rotation
+	123, // 39: alerting.routing.v1.UpdateRotationRequest.update_mask:type_name -> google.protobuf.FieldMask
+	135, // 40: alerting.routing.v1.CreateOverrideRequest.override:type_name -> alerting.routing.v1.ScheduleOverride
+	124, // 41: alerting.routing.v1.ListOverridesRequest.start_time:type_name -> google.protobuf.Timestamp
+	124, // 42: alerting.routing.v1.ListOverridesRequest.end_time:type_name -> google.protobuf.Timestamp
+	135, // 43: alerting.routing.v1.ListOverridesResponse.overrides:type_name -> alerting.routing.v1.ScheduleOverride
+	136, // 44: alerting.routing.v1.GetCurrentOnCallResponse.current_shift:type_name -> alerting.routing.v1.Shift
+	124, // 45: alerting.routing.v1.GetCurrentOnCallResponse.next_handoff:type_name -> google.protobuf.Timestamp
+	124, // 46: alerting.routing.v1.GetOnCallAtTimeRequest.time:type_name -> google.protobuf.Timestamp
+	136, // 47: alerting.routing.v1.GetOnCallAtTimeResponse.shift:type_name -> alerting.routing.v1.Shift
+	124, // 48: alerting.routing.v1.ListUpcomingShiftsRequest.until:type_name -> google.protobuf.Timestamp
+	136, // 49: alerting.routing.v1.ListUpcomingShiftsResponse.shifts:type_name -> alerting.routing.v1.Shift
+	136, // 50: alerting.routing.v1.AcknowledgeHandoffResponse.shift:type_name -> alerting.routing.v1.Shift
+	124, // 51: alerting.routing.v1.HandoffSummary.handoff_time:type_name -> google.protobuf.Timestamp
 	20,  // 52: alerting.routing.v1.HandoffSummary.active_alerts:type_name -> alerting.routing.v1.Alert
 	57,  // 53: alerting.routing.v1.HandoffSummary.open_tickets:type_name -> alerting.routing.v1.TicketSummary
 	58,  // 54: alerting.routing.v1.HandoffSummary.recent_events:type_name -> alerting.routing.v1.Event
-	115, // 55: alerting.routing.v1.TicketSummary.created_at:type_name -> google.protobuf.Timestamp
-	115, // 56: alerting.routing.v1.Event.timestamp:type_name -> google.protobuf.Timestamp
-	111, // 57: alerting.routing.v1.Event.metadata:type_name -> alerting.routing.v1.Event.MetadataEntry
-	128, // 58: alerting.routing.v1.CreateSiteRequest.site:type_name -> alerting.routing.v1.Site
-	129, // 59: alerting.routing.v1.ListSitesRequest.type:type_name -> alerting.routing.v1.SiteType
-	128, // 60: alerting.routing.v1.ListSitesResponse.sites:type_name -> alerting.routing.v1.Site
-	128, // 61: alerting.routing.v1.UpdateSiteRequest.site:type_name -> alerting.routing.v1.Site
-	114, // 62: alerting.routing.v1.UpdateSiteRequest.update_mask:type_name -> google.protobuf.FieldMask
-	130, // 63: alerting.routing.v1.CreateMaintenanceWindowRequest.window:type_name -> alerting.routing.v1.MaintenanceWindow
-	115, // 64: alerting.routing.v1.ListMaintenanceWindowsRequest.start_time:type_name -> google.protobuf.Timestamp
-	115, // 65: alerting.routing.v1.ListMaintenanceWindowsRequest.end_time:type_name -> google.protobuf.Timestamp
-	131, // 66: alerting.routing.v1.ListMaintenanceWindowsRequest.status:type_name -> alerting.routing.v1.MaintenanceStatus
-	130, // 67: alerting.routing.v1.ListMaintenanceWindowsResponse.windows:type_name -> alerting.routing.v1.MaintenanceWindow
-	130, // 68: alerting.routing.v1.UpdateMaintenanceWindowRequest.window:type_name -> alerting.routing.v1.MaintenanceWindow
-	114, // 69: alerting.routing.v1.UpdateMaintenanceWindowRequest.update_mask:type_name -> google.protobuf.FieldMask
+	124, // 55: alerting.routing.v1.TicketSummary.created_at:type_name -> google.protobuf.Timestamp
+	124, // 56: alerting.routing.v1.Event.timestamp:type_name -> google.protobuf.Timestamp
+	120, // 57: alerting.routing.v1.Event.metadata:type_name -> alerting.routing.v1.Event.MetadataEntry
+	137, // 58: alerting.routing.v1.CreateSiteRequest.site:type_name -> alerting.routing.v1.Site
+	138, // 59: alerting.routing.v1.ListSitesRequest.type:type_name -> alerting.routing.v1.SiteType
+	137, // 60: alerting.routing.v1.ListSitesResponse.sites:type_name -> alerting.routing.v1.Site
+	137, // 61: alerting.routing.v1.UpdateSiteRequest.site:type_name -> alerting.routing.v1.Site
+	123, // 62: alerting.routing.v1.UpdateSiteRequest.update_mask:type_name -> google.protobuf.FieldMask
+	139, // 63: alerting.routing.v1.CreateMaintenanceWindowRequest.window:type_name -> alerting.routing.v1.MaintenanceWindow
+	124, // 64: alerting.routing.v1.ListMaintenanceWindowsRequest.start_time:type_name -> google.protobuf.Timestamp
+	124, // 65: alerting.routing.v1.ListMaintenanceWindowsRequest.end_time:type_name -> google.protobuf.Timestamp
+	140, // 66: alerting.routing.v1.ListMaintenanceWindowsRequest.status:type_name -> alerting.routing.v1.MaintenanceStatus
+	139, // 67: alerting.routing.v1.ListMaintenanceWindowsResponse.windows:type_name -> alerting.routing.v1.MaintenanceWindow
+	139, // 68: alerting.routing.v1.UpdateMaintenanceWindowRequest.window:type_name -> alerting.routing.v1.MaintenanceWindow
+	123, // 69: alerting.routing.v1.UpdateMaintenanceWindowRequest.update_mask:type_name -> google.protobuf.FieldMask
 	20,  // 70: alerting.routing.v1.CheckAlertMaintenanceRequest.alert:type_name -> alerting.routing.v1.Alert
-	130, // 71: alerting.routing.v1.CheckAlertMaintenanceResponse.matching_windows:type_name -> alerting.routing.v1.MaintenanceWindow
-	132, // 72: alerting.routing.v1.CheckAlertMaintenanceResponse.recommended_action:type_name -> alerting.routing.v1.MaintenanceAction
-	133, // 73: alerting.routing.v1.CreateEscalationPolicyRequest.policy:type_name -> alerting.routing.v1.EscalationPolicy
-	133, // 74: alerting.routing.v1.ListEscalationPoliciesResponse.policies:type_name -> alerting.routing.v1.EscalationPolicy
-	133, // 75: alerting.routing.v1.UpdateEscalationPolicyRequest.policy:type_name -> alerting.routing.v1.EscalationPolicy
-	114, // 76: alerting.routing.v1.UpdateEscalationPolicyRequest.update_mask:type_name -> google.protobuf.FieldMask
-	115, // 77: alerting.routing.v1.StartEscalationResponse.next_step_at:type_name -> google.protobuf.Timestamp
+	139, // 71: alerting.routing.v1.CheckAlertMaintenanceResponse.matching_windows:type_name -> alerting.routing.v1.MaintenanceWindow
+	141, // 72: alerting.routing.v1.CheckAlertMaintenanceResponse.recommended_action:type_name -> alerting.routing.v1.MaintenanceAction
+	142, // 73: alerting.routing.v1.CreateEscalationPolicyRequest.policy:type_name -> alerting.routing.v1.EscalationPolicy
+	142, // 74: alerting.routing.v1.ListEscalationPoliciesResponse.policies:type_name -> alerting.routing.v1.EscalationPolicy
+	142, // 75: alerting.routing.v1.UpdateEscalationPolicyRequest.policy:type_name -> alerting.routing.v1.EscalationPolicy
+	123, // 76: alerting.routing.v1.UpdateEscalationPolicyRequest.update_mask:type_name -> google.protobuf.FieldMask
+	124, // 77: alerting.routing.v1.StartEscalationResponse.next_step_at:type_name -> google.protobuf.Timestamp
 	2,   // 78: alerting.routing.v1.EscalationStatus.state:type_name -> alerting.routing.v1.EscalationState
-	115, // 79: alerting.routing.v1.EscalationStatus.started_at:type_name -> google.protobuf.Timestamp
-	115, // 80: alerting.routing.v1.EscalationStatus.next_step_at:type_name -> google.protobuf.Timestamp
+	124, // 79: alerting.routing.v1.EscalationStatus.started_at:type_name -> google.protobuf.Timestamp
+	124, // 80: alerting.routing.v1.EscalationStatus.next_step_at:type_name -> google.protobuf.Timestamp
 	88,  // 81: alerting.routing.v1.EscalationStatus.step_results:type_name -> alerting.routing.v1.EscalationStepResult
-	115, // 82: alerting.routing.v1.EscalationStepResult.executed_at:type_name -> google.protobuf.Timestamp
-	134, // 83: alerting.routing.v1.CreateCustomerTierRequest.tier:type_name -> alerting.routing.v1.CustomerTier
-	134, // 84: alerting.routing.v1.ListCustomerTiersResponse.tiers:type_name -> alerting.routing.v1.CustomerTier
-	134, // 85: alerting.routing.v1.UpdateCustomerTierRequest.tier:type_name -> alerting.routing.v1.CustomerTier
-	114, // 86: alerting.routing.v1.UpdateCustomerTierRequest.update_mask:type_name -> google.protobuf.FieldMask
-	112, // 87: alerting.routing.v1.ResolveCustomerTierRequest.labels:type_name -> alerting.routing.v1.ResolveCustomerTierRequest.LabelsEntry
-	134, // 88: alerting.routing.v1.ResolveCustomerTierResponse.tier:type_name -> alerting.routing.v1.CustomerTier
-	135, // 89: alerting.routing.v1.CreateCarrierRequest.carrier:type_name -> alerting.routing.v1.CarrierConfig
-	135, // 90: alerting.routing.v1.ListCarriersResponse.carriers:type_name -> alerting.routing.v1.CarrierConfig
-	135, // 91: alerting.routing.v1.UpdateCarrierRequest.carrier:type_name -> alerting.routing.v1.CarrierConfig
-	114, // 92: alerting.routing.v1.UpdateCarrierRequest.update_mask:type_name -> google.protobuf.FieldMask
-	3,   // 93: alerting.routing.v1.RoutingService.CreateRoutingRule:input_type -> alerting.routing.v1.CreateRoutingRuleRequest
-	4,   // 94: alerting.routing.v1.RoutingService.GetRoutingRule:input_type -> alerting.routing.v1.GetRoutingRuleRequest
-	5,   // 95: alerting.routing.v1.RoutingService.ListRoutingRules:input_type -> alerting.routing.v1.ListRoutingRulesRequest
-	7,   // 96: alerting.routing.v1.RoutingService.UpdateRoutingRule:input_type -> alerting.routing.v1.UpdateRoutingRuleRequest
-	8,   // 97: alerting.routing.v1.RoutingService.DeleteRoutingRule:input_type -> alerting.routing.v1.DeleteRoutingRuleRequest
-	10,  // 98: alerting.routing.v1.RoutingService.ReorderRoutingRules:input_type -> alerting.routing.v1.ReorderRoutingRulesRequest
-	12,  // 99: alerting.routing.v1.RoutingService.TestRoutingRule:input_type -> alerting.routing.v1.TestRoutingRuleRequest
-	14,  // 100: alerting.routing.v1.RoutingService.SimulateRouting:input_type -> alerting.routing.v1.SimulateRoutingRequest
-	16,  // 101: alerting.routing.v1.RoutingService.GetRoutingAuditLogs:input_type -> alerting.routing.v1.GetRoutingAuditLogsRequest
-	18,  // 102: alerting.routing.v1.RoutingService.RouteAlert:input_type -> alerting.routing.v1.RouteAlertRequest
-	21,  // 103: alerting.routing.v1.TeamService.CreateTeam:input_type -> alerting.routing.v1.CreateTeamRequest
-	22,  // 104: alerting.routing.v1.TeamService.GetTeam:input_type -> alerting.routing.v1.GetTeamRequest
-	23,  // 105: alerting.routing.v1.TeamService.ListTeams:input_type -> alerting.routing.v1.ListTeamsRequest
-	25,  // 106: alerting.routing.v1.TeamService.UpdateTeam:input_type -> alerting.routing.v1.UpdateTeamRequest
-	26,  // 107: alerting.routing.v1.TeamService.DeleteTeam:input_type -> alerting.routing.v1.DeleteTeamRequest
-	28,  // 108: alerting.routing.v1.TeamService.AddTeamMember:input_type -> alerting.routing.v1.AddTeamMemberRequest
-	29,  // 109: alerting.routing.v1.TeamService.RemoveTeamMember:input_type -> alerting.routing.v1.RemoveTeamMemberRequest
-	30,  // 110: alerting.routing.v1.TeamService.UpdateTeamMember:input_type -> alerting.routing.v1.UpdateTeamMemberRequest
-	31,  // 111: alerting.routing.v1.TeamService.GetUserTeams:input_type -> alerting.routing.v1.GetUserTeamsRequest
-	32,  // 112: alerting.routing.v1.ScheduleService.CreateSchedule:input_type -> alerting.routing.v1.CreateScheduleRequest
-	33,  // 113: alerting.routing.v1.ScheduleService.GetSchedule:input_type -> alerting.routing.v1.GetScheduleRequest
-	34,  // 114: alerting.routing.v1.ScheduleService.ListSchedules:input_type -> alerting.routing.v1.ListSchedulesRequest
-	36,  // 115: alerting.routing.v1.ScheduleService.UpdateSchedule:input_type -> alerting.routing.v1.UpdateScheduleRequest
-	37,  // 116: alerting.routing.v1.ScheduleService.DeleteSchedule:input_type -> alerting.routing.v1.DeleteScheduleRequest
-	39,  // 117: alerting.routing.v1.ScheduleService.AddRotation:input_type -> alerting.routing.v1.AddRotationRequest
-	40,  // 118: alerting.routing.v1.ScheduleService.UpdateRotation:input_type -> alerting.routing.v1.UpdateRotationRequest
-	41,  // 119: alerting.routing.v1.ScheduleService.RemoveRotation:input_type -> alerting.routing.v1.RemoveRotationRequest
-	42,  // 120: alerting.routing.v1.ScheduleService.CreateOverride:input_type -> alerting.routing.v1.CreateOverrideRequest
-	43,  // 121: alerting.routing.v1.ScheduleService.DeleteOverride:input_type -> alerting.routing.v1.DeleteOverrideRequest
-	45,  // 122: alerting.routing.v1.ScheduleService.ListOverrides:input_type -> alerting.routing.v1.ListOverridesRequest
-	47,  // 123: alerting.routing.v1.ScheduleService.GetCurrentOnCall:input_type -> alerting.routing.v1.GetCurrentOnCallRequest
-	49,  // 124: alerting.routing.v1.ScheduleService.GetOnCallAtTime:input_type -> alerting.routing.v1.GetOnCallAtTimeRequest
-	51,  // 125: alerting.routing.v1.ScheduleService.ListUpcomingShifts:input_type -> alerting.routing.v1.ListUpcomingShiftsRequest
-	53,  // 126: alerting.routing.v1.ScheduleService.AcknowledgeHandoff:input_type -> alerting.routing.v1.AcknowledgeHandoffRequest
-	55,  // 127: alerting.routing.v1.ScheduleService.GetHandoffSummary:input_type -> alerting.routing.v1.GetHandoffSummaryRequest
-	59,  // 128: alerting.routing.v1.SiteService.CreateSite:input_type -> alerting.routing.v1.CreateSiteRequest
-	60,  // 129: alerting.routing.v1.SiteService.GetSite:input_type -> alerting.routing.v1.GetSiteRequest
-	62,  // 130: alerting.routing.v1.SiteService.ListSites:input_type -> alerting.routing.v1.ListSitesRequest
-	64,  // 131: alerting.routing.v1.SiteService.UpdateSite:input_type -> alerting.routing.v1.UpdateSiteRequest
-	65,  // 132: alerting.routing.v1.SiteService.DeleteSite:input_type -> alerting.routing.v1.DeleteSiteRequest
-	61,  // 133: alerting.routing.v1.SiteService.GetSiteByCode:input_type -> alerting.routing.v1.GetSiteByCodeRequest
-	67,  // 134: alerting.routing.v1.MaintenanceService.CreateMaintenanceWindow:input_type -> alerting.routing.v1.CreateMaintenanceWindowRequest
-	68,  // 135: alerting.routing.v1.MaintenanceService.GetMaintenanceWindow:input_type -> alerting.routing.v1.GetMaintenanceWindowRequest
-	69,  // 136: alerting.routing.v1.MaintenanceService.ListMaintenanceWindows:input_type -> alerting.routing.v1.ListMaintenanceWindowsRequest
-	71,  // 137: alerting.routing.v1.MaintenanceService.UpdateMaintenanceWindow:input_type -> alerting.routing.v1.UpdateMaintenanceWindowRequest
-	72,  // 138: alerting.routing.v1.MaintenanceService.DeleteMaintenanceWindow:input_type -> alerting.routing.v1.DeleteMaintenanceWindowRequest
-	74,  // 139: alerting.routing.v1.MaintenanceService.ListActiveMaintenanceWindows:input_type -> alerting.routing.v1.ListActiveMaintenanceWindowsRequest
-	75,  // 140: alerting.routing.v1.MaintenanceService.CheckAlertMaintenance:input_type -> alerting.routing.v1.CheckAlertMaintenanceRequest
-	77,  // 141: alerting.routing.v1.EscalationService.CreateEscalationPolicy:input_type -> alerting.routing.v1.CreateEscalationPolicyRequest
-	78,  // 142: alerting.routing.v1.EscalationService.GetEscalationPolicy:input_type -> alerting.routing.v1.GetEscalationPolicyRequest
-	79,  // 143: alerting.routing.v1.EscalationService.ListEscalationPolicies:input_type -> alerting.routing.v1.ListEscalationPoliciesRequest
-	81,  // 144: alerting.routing.v1.EscalationService.UpdateEscalationPolicy:input_type -> alerting.routing.v1.UpdateEscalationPolicyRequest
-	82,  // 145: alerting.routing.v1.EscalationService.DeleteEscalationPolicy:input_type -> alerting.routing.v1.DeleteEscalationPolicyRequest
-	84,  // 146: alerting.routing.v1.EscalationService.StartEscalation:input_type -> alerting.routing.v1.StartEscalationRequest
-	86,  // 147: alerting.routing.v1.EscalationService.GetEscalationStatus:input_type -> alerting.routing.v1.GetEscalationStatusRequest
-	89,  // 148: alerting.routing.v1.EscalationService.StopEscalation:input_type -> alerting.routing.v1.StopEscalationRequest
-	91,  // 149: alerting.routing.v1.CustomerTierService.CreateCustomerTier:input_type -> alerting.routing.v1.CreateCustomerTierRequest
-	92,  // 150: alerting.routing.v1.CustomerTierService.GetCustomerTier:input_type -> alerting.routing.v1.GetCustomerTierRequest
-	93,  // 151: alerting.routing.v1.CustomerTierService.ListCustomerTiers:input_type -> alerting.routing.v1.ListCustomerTiersRequest
-	95,  // 152: alerting.routing.v1.CustomerTierService.UpdateCustomerTier:input_type -> alerting.routing.v1.UpdateCustomerTierRequest
-	96,  // 153: alerting.routing.v1.CustomerTierService.DeleteCustomerTier:input_type -> alerting.routing.v1.DeleteCustomerTierRequest
-	98,  // 154: alerting.routing.v1.CustomerTierService.ResolveCustomerTier:input_type -> alerting.routing.v1.ResolveCustomerTierRequest
-	100, // 155: alerting.routing.v1.CarrierService.CreateCarrier:input_type -> alerting.routing.v1.CreateCarrierRequest
-	101, // 156: alerting.routing.v1.CarrierService.GetCarrier:input_type -> alerting.routing.v1.GetCarrierRequest
-	103, // 157: alerting.routing.v1.CarrierService.ListCarriers:input_type -> alerting.routing.v1.ListCarriersRequest
-	105, // 158: alerting.routing.v1.CarrierService.UpdateCarrier:input_type -> alerting.routing.v1.UpdateCarrierRequest
-	106, // 159: alerting.routing.v1.CarrierService.DeleteCarrier:input_type -> alerting.routing.v1.DeleteCarrierRequest
-	102, // 160: alerting.routing.v1.CarrierService.GetCarrierByASN:input_type -> alerting.routing.v1.GetCarrierByASNRequest
-	113, // 161: alerting.routing.v1.RoutingService.CreateRoutingRule:output_type -> alerting.routing.v1.RoutingRule
-	113, // 162: alerting.routing.v1.RoutingService.GetRoutingRule:output_type -> alerting.routing.v1.RoutingRule
-	6,   // 163: alerting.routing.v1.RoutingService.ListRoutingRules:output_type -> alerting.routing.v1.ListRoutingRulesResponse
-	113, // 164: alerting.routing.v1.RoutingService.UpdateRoutingRule:output_type -> alerting.routing.v1.RoutingRule
-	9,   // 165: alerting.routing.v1.RoutingService.DeleteRoutingRule:output_type -> alerting.routing.v1.DeleteRoutingRuleResponse
-	11,  // 166: alerting.routing.v1.RoutingService.ReorderRoutingRules:output_type -> alerting.routing.v1.ReorderRoutingRulesResponse
-	13,  // 167: alerting.routing.v1.RoutingService.TestRoutingRule:output_type -> alerting.routing.v1.TestRoutingRuleResponse
-	15,  // 168: alerting.routing.v1.RoutingService.SimulateRouting:output_type -> alerting.routing.v1.SimulateRoutingResponse
-	17,  // 169: alerting.routing.v1.RoutingService.GetRoutingAuditLogs:output_type -> alerting.routing.v1.GetRoutingAuditLogsResponse
-	19,  // 170: alerting.routing.v1.RoutingService.RouteAlert:output_type -> alerting.routing.v1.RouteAlertResponse
-	122, // 171: alerting.routing.v1.TeamService.CreateTeam:output_type -> alerting.routing.v1.Team
-	122, // 172: alerting.routing.v1.TeamService.GetTeam:output_type -> alerting.routing.v1.Team
-	24,  // 173: alerting.routing.v1.TeamService.ListTeams:output_type -> alerting.routing.v1.ListTeamsResponse
-	122, // 174: alerting.routing.v1.TeamService.UpdateTeam:output_type -> alerting.routing.v1.Team
-	27,  // 175: alerting.routing.v1.TeamService.DeleteTeam:output_type -> alerting.routing.v1.DeleteTeamResponse
-	122, // 176: alerting.routing.v1.TeamService.AddTeamMember:output_type -> alerting.routing.v1.Team
-	122, // 177: alerting.routing.v1.TeamService.RemoveTeamMember:output_type -> alerting.routing.v1.Team
-	122, // 178: alerting.routing.v1.TeamService.UpdateTeamMember:output_type -> alerting.routing.v1.Team
-	24,  // 179: alerting.routing.v1.TeamService.GetUserTeams:output_type -> alerting.routing.v1.ListTeamsResponse
-	124, // 180: alerting.routing.v1.ScheduleService.CreateSchedule:output_type -> alerting.routing.v1.Schedule
-	124, // 181: alerting.routing.v1.ScheduleService.GetSchedule:output_type -> alerting.routing.v1.Schedule
-	35,  // 182: alerting.routing.v1.ScheduleService.ListSchedules:output_type -> alerting.routing.v1.ListSchedulesResponse
-	124, // 183: alerting.routing.v1.ScheduleService.UpdateSchedule:output_type -> alerting.routing.v1.Schedule
-	38,  // 184: alerting.routing.v1.ScheduleService.DeleteSchedule:output_type -> alerting.routing.v1.DeleteScheduleResponse
-	124, // 185: alerting.routing.v1.ScheduleService.AddRotation:output_type -> alerting.routing.v1.Schedule
-	124, // 186: alerting.routing.v1.ScheduleService.UpdateRotation:output_type -> alerting.routing.v1.Schedule
-	124, // 187: alerting.routing.v1.ScheduleService.RemoveRotation:output_type -> alerting.routing.v1.Schedule
-	126, // 188: alerting.routing.v1.ScheduleService.CreateOverride:output_type -> alerting.routing.v1.ScheduleOverride
-	44,  // 189: alerting.routing.v1.ScheduleService.DeleteOverride:output_type -> alerting.routing.v1.DeleteOverrideResponse
-	46,  // 190: alerting.routing.v1.ScheduleService.ListOverrides:output_type -> alerting.routing.v1.ListOverridesResponse
-	48,  // 191: alerting.routing.v1.ScheduleService.GetCurrentOnCall:output_type -> alerting.routing.v1.GetCurrentOnCallResponse
-	50,  // 192: alerting.routing.v1.ScheduleService.GetOnCallAtTime:output_type -> alerting.routing.v1.GetOnCallAtTimeResponse
-	52,  // 193: alerting.routing.v1.ScheduleService.ListUpcomingShifts:output_type -> alerting.routing.v1.ListUpcomingShiftsResponse
-	54,  // 194: alerting.routing.v1.ScheduleService.AcknowledgeHandoff:output_type -> alerting.routing.v1.AcknowledgeHandoffResponse
-	56,  // 195: alerting.routing.v1.ScheduleService.GetHandoffSummary:output_type -> alerting.routing.v1.HandoffSummary
-	128, // 196: alerting.routing.v1.SiteService.CreateSite:output_type -> alerting.routing.v1.Site
-	128, // 197: alerting.routing.v1.SiteService.GetSite:output_type -> alerting.routing.v1.Site
-	63,  // 198: alerting.routing.v1.SiteService.ListSites:output_type -> alerting.routing.v1.ListSitesResponse
-	128, // 199: alerting.routing.v1.SiteService.UpdateSite:output_type -> alerting.routing.v1.Site
-	66,  // 200: alerting.routing.v1.SiteService.DeleteSite:output_type -> alerting.routing.v1.DeleteSiteResponse
-	128, // 201: alerting.routing.v1.SiteService.GetSiteByCode:output_type -> alerting.routing.v1.Site
-	130, // 202: alerting.routing.v1.MaintenanceService.CreateMaintenanceWindow:output_type -> alerting.routing.v1.MaintenanceWindow
-	130, // 203: alerting.routing.v1.MaintenanceService.GetMaintenanceWindow:output_type -> alerting.routing.v1.MaintenanceWindow
-	70,  // 204: alerting.routing.v1.MaintenanceService.ListMaintenanceWindows:output_type -> alerting.routing.v1.ListMaintenanceWindowsResponse
-	130, // 205: alerting.routing.v1.MaintenanceService.UpdateMaintenanceWindow:output_type -> alerting.routing.v1.MaintenanceWindow
-	73,  // 206: alerting.routing.v1.MaintenanceService.DeleteMaintenanceWindow:output_type -> alerting.routing.v1.DeleteMaintenanceWindowResponse
-	70,  // 207: alerting.routing.v1.MaintenanceService.ListActiveMaintenanceWindows:output_type -> alerting.routing.v1.ListMaintenanceWindowsResponse
-	76,  // 208: alerting.routing.v1.MaintenanceService.CheckAlertMaintenance:output_type -> alerting.routing.v1.CheckAlertMaintenanceResponse
-	133, // 209: alerting.routing.v1.EscalationService.CreateEscalationPolicy:output_type -> alerting.routing.v1.EscalationPolicy
-	133, // 210: alerting.routing.v1.EscalationService.GetEscalationPolicy:output_type -> alerting.routing.v1.EscalationPolicy
-	80,  // 211: alerting.routing.v1.EscalationService.ListEscalationPolicies:output_type -> alerting.routing.v1.ListEscalationPoliciesResponse
-	133, // 212: alerting.routing.v1.EscalationService.UpdateEscalationPolicy:output_type -> alerting.routing.v1.EscalationPolicy
-	83,  // 213: alerting.routing.v1.EscalationService.DeleteEscalationPolicy:output_type -> alerting.routing.v1.DeleteEscalationPolicyResponse
-	85,  // 214: alerting.routing.v1.EscalationService.StartEscalation:output_type -> alerting.routing.v1.StartEscalationResponse
-	87,  // 215: alerting.routing.v1.EscalationService.GetEscalationStatus:output_type -> alerting.routing.v1.EscalationStatus
-	90,  // 216: alerting.routing.v1.EscalationService.StopEscalation:output_type -> alerting.routing.v1.StopEscalationResponse
-	134, // 217: alerting.routing.v1.CustomerTierService.CreateCustomerTier:output_type -> alerting.routing.v1.CustomerTier
-	134, // 218: alerting.routing.v1.CustomerTierService.GetCustomerTier:output_type -> alerting.routing.v1.CustomerTier
-	94,  // 219: alerting.routing.v1.CustomerTierService.ListCustomerTiers:output_type -> alerting.routing.v1.ListCustomerTiersResponse
-	134, // 220: alerting.routing.v1.CustomerTierService.UpdateCustomerTier:output_type -> alerting.routing.v1.CustomerTier
-	97,  // 221: alerting.routing.v1.CustomerTierService.DeleteCustomerTier:output_type -> alerting.routing.v1.DeleteCustomerTierResponse
-	99,  // 222: alerting.routing.v1.CustomerTierService.ResolveCustomerTier:output_type -> alerting.routing.v1.ResolveCustomerTierResponse
-	135, // 223: alerting.routing.v1.CarrierService.CreateCarrier:output_type -> alerting.routing.v1.CarrierConfig
-	135, // 224: alerting.routing.v1.CarrierService.GetCarrier:output_type -> alerting.routing.v1.CarrierConfig
-	104, // 225: alerting.routing.v1.CarrierService.ListCarriers:output_type -> alerting.routing.v1.ListCarriersResponse
-	135, // 226: alerting.routing.v1.CarrierService.UpdateCarrier:output_type -> alerting.routing.v1.CarrierConfig
-	107, // 227: alerting.routing.v1.CarrierService.DeleteCarrier:output_type -> alerting.routing.v1.DeleteCarrierResponse
-	135, // 228: alerting.routing.v1.CarrierService.GetCarrierByASN:output_type -> alerting.routing.v1.CarrierConfig
-	161, // [161:229] is the sub-list for method output_type
-	93,  // [93:161] is the sub-list for method input_type
-	93,  // [93:93] is the sub-list for extension type_name
-	93,  // [93:93] is the sub-list for extension extendee
-	0,   // [0:93] is the sub-list for field type_name
+	124, // 82: alerting.routing.v1.EscalationStepResult.executed_at:type_name -> google.protobuf.Timestamp
+	143, // 83: alerting.routing.v1.CreateCustomerTierRequest.tier:type_name -> alerting.routing.v1.CustomerTier
+	143, // 84: alerting.routing.v1.ListCustomerTiersResponse.tiers:type_name -> alerting.routing.v1.CustomerTier
+	143, // 85: alerting.routing.v1.UpdateCustomerTierRequest.tier:type_name -> alerting.routing.v1.CustomerTier
+	123, // 86: alerting.routing.v1.UpdateCustomerTierRequest.update_mask:type_name -> google.protobuf.FieldMask
+	121, // 87: alerting.routing.v1.ResolveCustomerTierRequest.labels:type_name -> alerting.routing.v1.ResolveCustomerTierRequest.LabelsEntry
+	143, // 88: alerting.routing.v1.ResolveCustomerTierResponse.tier:type_name -> alerting.routing.v1.CustomerTier
+	144, // 89: alerting.routing.v1.CreateCarrierRequest.carrier:type_name -> alerting.routing.v1.CarrierConfig
+	144, // 90: alerting.routing.v1.ListCarriersResponse.carriers:type_name -> alerting.routing.v1.CarrierConfig
+	144, // 91: alerting.routing.v1.UpdateCarrierRequest.carrier:type_name -> alerting.routing.v1.CarrierConfig
+	123, // 92: alerting.routing.v1.UpdateCarrierRequest.update_mask:type_name -> google.protobuf.FieldMask
+	124, // 93: alerting.routing.v1.RateLimitConfig.created_at:type_name -> google.protobuf.Timestamp
+	124, // 94: alerting.routing.v1.RateLimitConfig.updated_at:type_name -> google.protobuf.Timestamp
+	108, // 95: alerting.routing.v1.CreateRateLimitConfigRequest.config:type_name -> alerting.routing.v1.RateLimitConfig
+	108, // 96: alerting.routing.v1.ListRateLimitConfigsResponse.configs:type_name -> alerting.routing.v1.RateLimitConfig
+	108, // 97: alerting.routing.v1.UpdateRateLimitConfigRequest.config:type_name -> alerting.routing.v1.RateLimitConfig
+	123, // 98: alerting.routing.v1.UpdateRateLimitConfigRequest.update_mask:type_name -> google.protobuf.FieldMask
+	3,   // 99: alerting.routing.v1.RoutingService.CreateRoutingRule:input_type -> alerting.routing.v1.CreateRoutingRuleRequest
+	4,   // 100: alerting.routing.v1.RoutingService.GetRoutingRule:input_type -> alerting.routing.v1.GetRoutingRuleRequest
+	5,   // 101: alerting.routing.v1.RoutingService.ListRoutingRules:input_type -> alerting.routing.v1.ListRoutingRulesRequest
+	7,   // 102: alerting.routing.v1.RoutingService.UpdateRoutingRule:input_type -> alerting.routing.v1.UpdateRoutingRuleRequest
+	8,   // 103: alerting.routing.v1.RoutingService.DeleteRoutingRule:input_type -> alerting.routing.v1.DeleteRoutingRuleRequest
+	10,  // 104: alerting.routing.v1.RoutingService.ReorderRoutingRules:input_type -> alerting.routing.v1.ReorderRoutingRulesRequest
+	12,  // 105: alerting.routing.v1.RoutingService.TestRoutingRule:input_type -> alerting.routing.v1.TestRoutingRuleRequest
+	14,  // 106: alerting.routing.v1.RoutingService.SimulateRouting:input_type -> alerting.routing.v1.SimulateRoutingRequest
+	16,  // 107: alerting.routing.v1.RoutingService.GetRoutingAuditLogs:input_type -> alerting.routing.v1.GetRoutingAuditLogsRequest
+	18,  // 108: alerting.routing.v1.RoutingService.RouteAlert:input_type -> alerting.routing.v1.RouteAlertRequest
+	21,  // 109: alerting.routing.v1.TeamService.CreateTeam:input_type -> alerting.routing.v1.CreateTeamRequest
+	22,  // 110: alerting.routing.v1.TeamService.GetTeam:input_type -> alerting.routing.v1.GetTeamRequest
+	23,  // 111: alerting.routing.v1.TeamService.ListTeams:input_type -> alerting.routing.v1.ListTeamsRequest
+	25,  // 112: alerting.routing.v1.TeamService.UpdateTeam:input_type -> alerting.routing.v1.UpdateTeamRequest
+	26,  // 113: alerting.routing.v1.TeamService.DeleteTeam:input_type -> alerting.routing.v1.DeleteTeamRequest
+	28,  // 114: alerting.routing.v1.TeamService.AddTeamMember:input_type -> alerting.routing.v1.AddTeamMemberRequest
+	29,  // 115: alerting.routing.v1.TeamService.RemoveTeamMember:input_type -> alerting.routing.v1.RemoveTeamMemberRequest
+	30,  // 116: alerting.routing.v1.TeamService.UpdateTeamMember:input_type -> alerting.routing.v1.UpdateTeamMemberRequest
+	31,  // 117: alerting.routing.v1.TeamService.GetUserTeams:input_type -> alerting.routing.v1.GetUserTeamsRequest
+	32,  // 118: alerting.routing.v1.ScheduleService.CreateSchedule:input_type -> alerting.routing.v1.CreateScheduleRequest
+	33,  // 119: alerting.routing.v1.ScheduleService.GetSchedule:input_type -> alerting.routing.v1.GetScheduleRequest
+	34,  // 120: alerting.routing.v1.ScheduleService.ListSchedules:input_type -> alerting.routing.v1.ListSchedulesRequest
+	36,  // 121: alerting.routing.v1.ScheduleService.UpdateSchedule:input_type -> alerting.routing.v1.UpdateScheduleRequest
+	37,  // 122: alerting.routing.v1.ScheduleService.DeleteSchedule:input_type -> alerting.routing.v1.DeleteScheduleRequest
+	39,  // 123: alerting.routing.v1.ScheduleService.AddRotation:input_type -> alerting.routing.v1.AddRotationRequest
+	40,  // 124: alerting.routing.v1.ScheduleService.UpdateRotation:input_type -> alerting.routing.v1.UpdateRotationRequest
+	41,  // 125: alerting.routing.v1.ScheduleService.RemoveRotation:input_type -> alerting.routing.v1.RemoveRotationRequest
+	42,  // 126: alerting.routing.v1.ScheduleService.CreateOverride:input_type -> alerting.routing.v1.CreateOverrideRequest
+	43,  // 127: alerting.routing.v1.ScheduleService.DeleteOverride:input_type -> alerting.routing.v1.DeleteOverrideRequest
+	45,  // 128: alerting.routing.v1.ScheduleService.ListOverrides:input_type -> alerting.routing.v1.ListOverridesRequest
+	47,  // 129: alerting.routing.v1.ScheduleService.GetCurrentOnCall:input_type -> alerting.routing.v1.GetCurrentOnCallRequest
+	49,  // 130: alerting.routing.v1.ScheduleService.GetOnCallAtTime:input_type -> alerting.routing.v1.GetOnCallAtTimeRequest
+	51,  // 131: alerting.routing.v1.ScheduleService.ListUpcomingShifts:input_type -> alerting.routing.v1.ListUpcomingShiftsRequest
+	53,  // 132: alerting.routing.v1.ScheduleService.AcknowledgeHandoff:input_type -> alerting.routing.v1.AcknowledgeHandoffRequest
+	55,  // 133: alerting.routing.v1.ScheduleService.GetHandoffSummary:input_type -> alerting.routing.v1.GetHandoffSummaryRequest
+	59,  // 134: alerting.routing.v1.SiteService.CreateSite:input_type -> alerting.routing.v1.CreateSiteRequest
+	60,  // 135: alerting.routing.v1.SiteService.GetSite:input_type -> alerting.routing.v1.GetSiteRequest
+	62,  // 136: alerting.routing.v1.SiteService.ListSites:input_type -> alerting.routing.v1.ListSitesRequest
+	64,  // 137: alerting.routing.v1.SiteService.UpdateSite:input_type -> alerting.routing.v1.UpdateSiteRequest
+	65,  // 138: alerting.routing.v1.SiteService.DeleteSite:input_type -> alerting.routing.v1.DeleteSiteRequest
+	61,  // 139: alerting.routing.v1.SiteService.GetSiteByCode:input_type -> alerting.routing.v1.GetSiteByCodeRequest
+	67,  // 140: alerting.routing.v1.MaintenanceService.CreateMaintenanceWindow:input_type -> alerting.routing.v1.CreateMaintenanceWindowRequest
+	68,  // 141: alerting.routing.v1.MaintenanceService.GetMaintenanceWindow:input_type -> alerting.routing.v1.GetMaintenanceWindowRequest
+	69,  // 142: alerting.routing.v1.MaintenanceService.ListMaintenanceWindows:input_type -> alerting.routing.v1.ListMaintenanceWindowsRequest
+	71,  // 143: alerting.routing.v1.MaintenanceService.UpdateMaintenanceWindow:input_type -> alerting.routing.v1.UpdateMaintenanceWindowRequest
+	72,  // 144: alerting.routing.v1.MaintenanceService.DeleteMaintenanceWindow:input_type -> alerting.routing.v1.DeleteMaintenanceWindowRequest
+	74,  // 145: alerting.routing.v1.MaintenanceService.ListActiveMaintenanceWindows:input_type -> alerting.routing.v1.ListActiveMaintenanceWindowsRequest
+	75,  // 146: alerting.routing.v1.MaintenanceService.CheckAlertMaintenance:input_type -> alerting.routing.v1.CheckAlertMaintenanceRequest
+	77,  // 147: alerting.routing.v1.EscalationService.CreateEscalationPolicy:input_type -> alerting.routing.v1.CreateEscalationPolicyRequest
+	78,  // 148: alerting.routing.v1.EscalationService.GetEscalationPolicy:input_type -> alerting.routing.v1.GetEscalationPolicyRequest
+	79,  // 149: alerting.routing.v1.EscalationService.ListEscalationPolicies:input_type -> alerting.routing.v1.ListEscalationPoliciesRequest
+	81,  // 150: alerting.routing.v1.EscalationService.UpdateEscalationPolicy:input_type -> alerting.routing.v1.UpdateEscalationPolicyRequest
+	82,  // 151: alerting.routing.v1.EscalationService.DeleteEscalationPolicy:input_type -> alerting.routing.v1.DeleteEscalationPolicyRequest
+	84,  // 152: alerting.routing.v1.EscalationService.StartEscalation:input_type -> alerting.routing.v1.StartEscalationRequest
+	86,  // 153: alerting.routing.v1.EscalationService.GetEscalationStatus:input_type -> alerting.routing.v1.GetEscalationStatusRequest
+	89,  // 154: alerting.routing.v1.EscalationService.StopEscalation:input_type -> alerting.routing.v1.StopEscalationRequest
+	91,  // 155: alerting.routing.v1.CustomerTierService.CreateCustomerTier:input_type -> alerting.routing.v1.CreateCustomerTierRequest
+	92,  // 156: alerting.routing.v1.CustomerTierService.GetCustomerTier:input_type -> alerting.routing.v1.GetCustomerTierRequest
+	93,  // 157: alerting.routing.v1.CustomerTierService.ListCustomerTiers:input_type -> alerting.routing.v1.ListCustomerTiersRequest
+	95,  // 158: alerting.routing.v1.CustomerTierService.UpdateCustomerTier:input_type -> alerting.routing.v1.UpdateCustomerTierRequest
+	96,  // 159: alerting.routing.v1.CustomerTierService.DeleteCustomerTier:input_type -> alerting.routing.v1.DeleteCustomerTierRequest
+	98,  // 160: alerting.routing.v1.CustomerTierService.ResolveCustomerTier:input_type -> alerting.routing.v1.ResolveCustomerTierRequest
+	100, // 161: alerting.routing.v1.CarrierService.CreateCarrier:input_type -> alerting.routing.v1.CreateCarrierRequest
+	101, // 162: alerting.routing.v1.CarrierService.GetCarrier:input_type -> alerting.routing.v1.GetCarrierRequest
+	103, // 163: alerting.routing.v1.CarrierService.ListCarriers:input_type -> alerting.routing.v1.ListCarriersRequest
+	105, // 164: alerting.routing.v1.CarrierService.UpdateCarrier:input_type -> alerting.routing.v1.UpdateCarrierRequest
+	106, // 165: alerting.routing.v1.CarrierService.DeleteCarrier:input_type -> alerting.routing.v1.DeleteCarrierRequest
+	102, // 166: alerting.routing.v1.CarrierService.GetCarrierByASN:input_type -> alerting.routing.v1.GetCarrierByASNRequest
+	109, // 167: alerting.routing.v1.RateLimitService.CreateRateLimitConfig:input_type -> alerting.routing.v1.CreateRateLimitConfigRequest
+	110, // 168: alerting.routing.v1.RateLimitService.GetRateLimitConfig:input_type -> alerting.routing.v1.GetRateLimitConfigRequest
+	111, // 169: alerting.routing.v1.RateLimitService.GetRateLimitConfigByServiceID:input_type -> alerting.routing.v1.GetRateLimitConfigByServiceIDRequest
+	112, // 170: alerting.routing.v1.RateLimitService.ListRateLimitConfigs:input_type -> alerting.routing.v1.ListRateLimitConfigsRequest
+	114, // 171: alerting.routing.v1.RateLimitService.UpdateRateLimitConfig:input_type -> alerting.routing.v1.UpdateRateLimitConfigRequest
+	115, // 172: alerting.routing.v1.RateLimitService.DeleteRateLimitConfig:input_type -> alerting.routing.v1.DeleteRateLimitConfigRequest
+	122, // 173: alerting.routing.v1.RoutingService.CreateRoutingRule:output_type -> alerting.routing.v1.RoutingRule
+	122, // 174: alerting.routing.v1.RoutingService.GetRoutingRule:output_type -> alerting.routing.v1.RoutingRule
+	6,   // 175: alerting.routing.v1.RoutingService.ListRoutingRules:output_type -> alerting.routing.v1.ListRoutingRulesResponse
+	122, // 176: alerting.routing.v1.RoutingService.UpdateRoutingRule:output_type -> alerting.routing.v1.RoutingRule
+	9,   // 177: alerting.routing.v1.RoutingService.DeleteRoutingRule:output_type -> alerting.routing.v1.DeleteRoutingRuleResponse
+	11,  // 178: alerting.routing.v1.RoutingService.ReorderRoutingRules:output_type -> alerting.routing.v1.ReorderRoutingRulesResponse
+	13,  // 179: alerting.routing.v1.RoutingService.TestRoutingRule:output_type -> alerting.routing.v1.TestRoutingRuleResponse
+	15,  // 180: alerting.routing.v1.RoutingService.SimulateRouting:output_type -> alerting.routing.v1.SimulateRoutingResponse
+	17,  // 181: alerting.routing.v1.RoutingService.GetRoutingAuditLogs:output_type -> alerting.routing.v1.GetRoutingAuditLogsResponse
+	19,  // 182: alerting.routing.v1.RoutingService.RouteAlert:output_type -> alerting.routing.v1.RouteAlertResponse
+	131, // 183: alerting.routing.v1.TeamService.CreateTeam:output_type -> alerting.routing.v1.Team
+	131, // 184: alerting.routing.v1.TeamService.GetTeam:output_type -> alerting.routing.v1.Team
+	24,  // 185: alerting.routing.v1.TeamService.ListTeams:output_type -> alerting.routing.v1.ListTeamsResponse
+	131, // 186: alerting.routing.v1.TeamService.UpdateTeam:output_type -> alerting.routing.v1.Team
+	27,  // 187: alerting.routing.v1.TeamService.DeleteTeam:output_type -> alerting.routing.v1.DeleteTeamResponse
+	131, // 188: alerting.routing.v1.TeamService.AddTeamMember:output_type -> alerting.routing.v1.Team
+	131, // 189: alerting.routing.v1.TeamService.RemoveTeamMember:output_type -> alerting.routing.v1.Team
+	131, // 190: alerting.routing.v1.TeamService.UpdateTeamMember:output_type -> alerting.routing.v1.Team
+	24,  // 191: alerting.routing.v1.TeamService.GetUserTeams:output_type -> alerting.routing.v1.ListTeamsResponse
+	133, // 192: alerting.routing.v1.ScheduleService.CreateSchedule:output_type -> alerting.routing.v1.Schedule
+	133, // 193: alerting.routing.v1.ScheduleService.GetSchedule:output_type -> alerting.routing.v1.Schedule
+	35,  // 194: alerting.routing.v1.ScheduleService.ListSchedules:output_type -> alerting.routing.v1.ListSchedulesResponse
+	133, // 195: alerting.routing.v1.ScheduleService.UpdateSchedule:output_type -> alerting.routing.v1.Schedule
+	38,  // 196: alerting.routing.v1.ScheduleService.DeleteSchedule:output_type -> alerting.routing.v1.DeleteScheduleResponse
+	133, // 197: alerting.routing.v1.ScheduleService.AddRotation:output_type -> alerting.routing.v1.Schedule
+	133, // 198: alerting.routing.v1.ScheduleService.UpdateRotation:output_type -> alerting.routing.v1.Schedule
+	133, // 199: alerting.routing.v1.ScheduleService.RemoveRotation:output_type -> alerting.routing.v1.Schedule
+	135, // 200: alerting.routing.v1.ScheduleService.CreateOverride:output_type -> alerting.routing.v1.ScheduleOverride
+	44,  // 201: alerting.routing.v1.ScheduleService.DeleteOverride:output_type -> alerting.routing.v1.DeleteOverrideResponse
+	46,  // 202: alerting.routing.v1.ScheduleService.ListOverrides:output_type -> alerting.routing.v1.ListOverridesResponse
+	48,  // 203: alerting.routing.v1.ScheduleService.GetCurrentOnCall:output_type -> alerting.routing.v1.GetCurrentOnCallResponse
+	50,  // 204: alerting.routing.v1.ScheduleService.GetOnCallAtTime:output_type -> alerting.routing.v1.GetOnCallAtTimeResponse
+	52,  // 205: alerting.routing.v1.ScheduleService.ListUpcomingShifts:output_type -> alerting.routing.v1.ListUpcomingShiftsResponse
+	54,  // 206: alerting.routing.v1.ScheduleService.AcknowledgeHandoff:output_type -> alerting.routing.v1.AcknowledgeHandoffResponse
+	56,  // 207: alerting.routing.v1.ScheduleService.GetHandoffSummary:output_type -> alerting.routing.v1.HandoffSummary
+	137, // 208: alerting.routing.v1.SiteService.CreateSite:output_type -> alerting.routing.v1.Site
+	137, // 209: alerting.routing.v1.SiteService.GetSite:output_type -> alerting.routing.v1.Site
+	63,  // 210: alerting.routing.v1.SiteService.ListSites:output_type -> alerting.routing.v1.ListSitesResponse
+	137, // 211: alerting.routing.v1.SiteService.UpdateSite:output_type -> alerting.routing.v1.Site
+	66,  // 212: alerting.routing.v1.SiteService.DeleteSite:output_type -> alerting.routing.v1.DeleteSiteResponse
+	137, // 213: alerting.routing.v1.SiteService.GetSiteByCode:output_type -> alerting.routing.v1.Site
+	139, // 214: alerting.routing.v1.MaintenanceService.CreateMaintenanceWindow:output_type -> alerting.routing.v1.MaintenanceWindow
+	139, // 215: alerting.routing.v1.MaintenanceService.GetMaintenanceWindow:output_type -> alerting.routing.v1.MaintenanceWindow
+	70,  // 216: alerting.routing.v1.MaintenanceService.ListMaintenanceWindows:output_type -> alerting.routing.v1.ListMaintenanceWindowsResponse
+	139, // 217: alerting.routing.v1.MaintenanceService.UpdateMaintenanceWindow:output_type -> alerting.routing.v1.MaintenanceWindow
+	73,  // 218: alerting.routing.v1.MaintenanceService.DeleteMaintenanceWindow:output_type -> alerting.routing.v1.DeleteMaintenanceWindowResponse
+	70,  // 219: alerting.routing.v1.MaintenanceService.ListActiveMaintenanceWindows:output_type -> alerting.routing.v1.ListMaintenanceWindowsResponse
+	76,  // 220: alerting.routing.v1.MaintenanceService.CheckAlertMaintenance:output_type -> alerting.routing.v1.CheckAlertMaintenanceResponse
+	142, // 221: alerting.routing.v1.EscalationService.CreateEscalationPolicy:output_type -> alerting.routing.v1.EscalationPolicy
+	142, // 222: alerting.routing.v1.EscalationService.GetEscalationPolicy:output_type -> alerting.routing.v1.EscalationPolicy
+	80,  // 223: alerting.routing.v1.EscalationService.ListEscalationPolicies:output_type -> alerting.routing.v1.ListEscalationPoliciesResponse
+	142, // 224: alerting.routing.v1.EscalationService.UpdateEscalationPolicy:output_type -> alerting.routing.v1.EscalationPolicy
+	83,  // 225: alerting.routing.v1.EscalationService.DeleteEscalationPolicy:output_type -> alerting.routing.v1.DeleteEscalationPolicyResponse
+	85,  // 226: alerting.routing.v1.EscalationService.StartEscalation:output_type -> alerting.routing.v1.StartEscalationResponse
+	87,  // 227: alerting.routing.v1.EscalationService.GetEscalationStatus:output_type -> alerting.routing.v1.EscalationStatus
+	90,  // 228: alerting.routing.v1.EscalationService.StopEscalation:output_type -> alerting.routing.v1.StopEscalationResponse
+	143, // 229: alerting.routing.v1.CustomerTierService.CreateCustomerTier:output_type -> alerting.routing.v1.CustomerTier
+	143, // 230: alerting.routing.v1.CustomerTierService.GetCustomerTier:output_type -> alerting.routing.v1.CustomerTier
+	94,  // 231: alerting.routing.v1.CustomerTierService.ListCustomerTiers:output_type -> alerting.routing.v1.ListCustomerTiersResponse
+	143, // 232: alerting.routing.v1.CustomerTierService.UpdateCustomerTier:output_type -> alerting.routing.v1.CustomerTier
+	97,  // 233: alerting.routing.v1.CustomerTierService.DeleteCustomerTier:output_type -> alerting.routing.v1.DeleteCustomerTierResponse
+	99,  // 234: alerting.routing.v1.CustomerTierService.ResolveCustomerTier:output_type -> alerting.routing.v1.ResolveCustomerTierResponse
+	144, // 235: alerting.routing.v1.CarrierService.CreateCarrier:output_type -> alerting.routing.v1.CarrierConfig
+	144, // 236: alerting.routing.v1.CarrierService.GetCarrier:output_type -> alerting.routing.v1.CarrierConfig
+	104, // 237: alerting.routing.v1.CarrierService.ListCarriers:output_type -> alerting.routing.v1.ListCarriersResponse
+	144, // 238: alerting.routing.v1.CarrierService.UpdateCarrier:output_type -> alerting.routing.v1.CarrierConfig
+	107, // 239: alerting.routing.v1.CarrierService.DeleteCarrier:output_type -> alerting.routing.v1.DeleteCarrierResponse
+	144, // 240: alerting.routing.v1.CarrierService.GetCarrierByASN:output_type -> alerting.routing.v1.CarrierConfig
+	108, // 241: alerting.routing.v1.RateLimitService.CreateRateLimitConfig:output_type -> alerting.routing.v1.RateLimitConfig
+	108, // 242: alerting.routing.v1.RateLimitService.GetRateLimitConfig:output_type -> alerting.routing.v1.RateLimitConfig
+	108, // 243: alerting.routing.v1.RateLimitService.GetRateLimitConfigByServiceID:output_type -> alerting.routing.v1.RateLimitConfig
+	113, // 244: alerting.routing.v1.RateLimitService.ListRateLimitConfigs:output_type -> alerting.routing.v1.ListRateLimitConfigsResponse
+	108, // 245: alerting.routing.v1.RateLimitService.UpdateRateLimitConfig:output_type -> alerting.routing.v1.RateLimitConfig
+	116, // 246: alerting.routing.v1.RateLimitService.DeleteRateLimitConfig:output_type -> alerting.routing.v1.DeleteRateLimitConfigResponse
+	173, // [173:247] is the sub-list for method output_type
+	99,  // [99:173] is the sub-list for method input_type
+	99,  // [99:99] is the sub-list for extension type_name
+	99,  // [99:99] is the sub-list for extension extendee
+	0,   // [0:99] is the sub-list for field type_name
 }
 
 func init() { file_alerting_routing_v1_routing_service_proto_init() }
@@ -6959,9 +7515,9 @@ func file_alerting_routing_v1_routing_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_alerting_routing_v1_routing_service_proto_rawDesc), len(file_alerting_routing_v1_routing_service_proto_rawDesc)),
 			NumEnums:      3,
-			NumMessages:   110,
+			NumMessages:   119,
 			NumExtensions: 0,
-			NumServices:   8,
+			NumServices:   9,
 		},
 		GoTypes:           file_alerting_routing_v1_routing_service_proto_goTypes,
 		DependencyIndexes: file_alerting_routing_v1_routing_service_proto_depIdxs,

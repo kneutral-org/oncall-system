@@ -839,3 +839,76 @@ message DeleteCarrierRequest {
 message DeleteCarrierResponse {
   bool success = 1;
 }
+
+// =============================================================================
+// RATE LIMIT SERVICE
+// =============================================================================
+
+// RateLimitService provides CRUD operations for per-service rate limit configuration
+service RateLimitService {
+  // Create a new rate limit config for a service
+  rpc CreateRateLimitConfig(CreateRateLimitConfigRequest) returns (RateLimitConfig);
+
+  // Get a rate limit config by ID
+  rpc GetRateLimitConfig(GetRateLimitConfigRequest) returns (RateLimitConfig);
+
+  // Get a rate limit config by service ID
+  rpc GetRateLimitConfigByServiceID(GetRateLimitConfigByServiceIDRequest) returns (RateLimitConfig);
+
+  // List rate limit configs with pagination
+  rpc ListRateLimitConfigs(ListRateLimitConfigsRequest) returns (ListRateLimitConfigsResponse);
+
+  // Update a rate limit config
+  rpc UpdateRateLimitConfig(UpdateRateLimitConfigRequest) returns (RateLimitConfig);
+
+  // Delete a rate limit config
+  rpc DeleteRateLimitConfig(DeleteRateLimitConfigRequest) returns (DeleteRateLimitConfigResponse);
+}
+
+// RateLimitConfig represents per-service rate limit configuration
+message RateLimitConfig {
+  string id = 1;
+  string service_id = 2;
+  int32 requests_per_minute = 3;
+  int32 burst_size = 4;
+  bool enabled = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+}
+
+message CreateRateLimitConfigRequest {
+  RateLimitConfig config = 1;
+}
+
+message GetRateLimitConfigRequest {
+  string id = 1;
+}
+
+message GetRateLimitConfigByServiceIDRequest {
+  string service_id = 1;
+}
+
+message ListRateLimitConfigsRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+  bool enabled_only = 3;
+}
+
+message ListRateLimitConfigsResponse {
+  repeated RateLimitConfig configs = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+}
+
+message UpdateRateLimitConfigRequest {
+  RateLimitConfig config = 1;
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteRateLimitConfigRequest {
+  string id = 1;
+}
+
+message DeleteRateLimitConfigResponse {
+  bool success = 1;
+}
