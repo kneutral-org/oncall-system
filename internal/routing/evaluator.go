@@ -7,18 +7,34 @@ import (
 	"strings"
 	"time"
 
+	"github.com/kneutral-org/alerting-system/internal/routing/cel"
 	routingv1 "github.com/kneutral-org/alerting-system/pkg/proto/alerting/routing/v1"
 )
 
 // Evaluator evaluates routing conditions against alerts.
 type Evaluator struct {
-	// celEnv can be used for CEL expression evaluation (optional)
-	// For now, CEL is stubbed and will be implemented later
+	// celEvaluator handles CEL expression evaluation
+	celEvaluator *cel.Evaluator
 }
 
 // NewEvaluator creates a new condition evaluator.
 func NewEvaluator() *Evaluator {
-	return &Evaluator{}
+	celEval, _ := cel.NewEvaluator()
+	return &Evaluator{
+		celEvaluator: celEval,
+	}
+}
+
+// NewEvaluatorWithCEL creates a new evaluator with a custom CEL evaluator.
+func NewEvaluatorWithCEL(celEval *cel.Evaluator) *Evaluator {
+	return &Evaluator{
+		celEvaluator: celEval,
+	}
+}
+
+// CELEvaluator returns the CEL evaluator instance.
+func (e *Evaluator) CELEvaluator() *cel.Evaluator {
+	return e.celEvaluator
 }
 
 // EvaluateResult represents the result of evaluating a single condition.
@@ -70,9 +86,7 @@ func (e *Evaluator) EvaluateCondition(cond *routingv1.RoutingCondition, alert *r
 		result.Actual, result.Matched = e.evaluateCarrierCondition(cond, alert)
 
 	case routingv1.ConditionType_CONDITION_TYPE_CEL:
-		// CEL evaluation is stubbed for now
-		result.Actual = "CEL not implemented"
-		result.Matched = false
+		result.Actual, result.Matched = e.evaluateCELCondition(cond, alert)
 
 	default:
 		result.Actual = "unknown condition type"
@@ -255,6 +269,49 @@ func (e *Evaluator) evaluateCarrierCondition(cond *routingv1.RoutingCondition, a
 		carrier = alert.Labels["asn"]
 	}
 	return carrier, e.compareValue(cond.Operator, carrier, cond)
+}
+
+// evaluateCELCondition evaluates a CEL expression condition.
+func (e *Evaluator) evaluateCELCondition(cond *routingv1.RoutingCondition, alert *routingv1.Alert) (string, bool) {
+	expression := cond.CelExpression
+	if expression == "" {
+		return "empty CEL expression", false
+	}
+
+	if e.celEvaluator == nil {
+		return "CEL evaluator not initialized", false
+	}
+
+	// Create evaluation context (no site/customer context for basic evaluation)
+	ctx := &cel.EvalContext{
+		Now: time.Now(),
+	}
+
+	matched, err := e.celEvaluator.EvaluateExpression(expression, alert, ctx)
+	if err != nil {
+		return err.Error(), false
+	}
+
+	if matched {
+		return "CEL expression matched", true
+	}
+	return "CEL expression did not match", false
+}
+
+// EvaluateCELWithContext evaluates a CEL expression with full context.
+func (e *Evaluator) EvaluateCELWithContext(expression string, alert *routingv1.Alert, ctx *cel.EvalContext) (bool, error) {
+	if e.celEvaluator == nil {
+		return false, cel.ErrEvaluationFailed
+	}
+	return e.celEvaluator.EvaluateExpression(expression, alert, ctx)
+}
+
+// ValidateCELExpression validates a CEL expression without evaluating it.
+func (e *Evaluator) ValidateCELExpression(expression string) error {
+	if e.celEvaluator == nil {
+		return cel.ErrEvaluationFailed
+	}
+	return e.celEvaluator.Validate(expression)
 }
 
 // compareValue compares a value using the specified operator.
