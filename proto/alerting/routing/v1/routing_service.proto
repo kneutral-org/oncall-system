@@ -839,3 +839,73 @@ message DeleteCarrierRequest {
 message DeleteCarrierResponse {
   bool success = 1;
 }
+
+// =============================================================================
+// EQUIPMENT TYPE SERVICE (ISP/DC)
+// =============================================================================
+
+service EquipmentTypeService {
+  // CRUD operations
+  rpc CreateEquipmentType(CreateEquipmentTypeRequest) returns (EquipmentType);
+  rpc GetEquipmentType(GetEquipmentTypeRequest) returns (EquipmentType);
+  rpc GetEquipmentTypeByName(GetEquipmentTypeByNameRequest) returns (EquipmentType);
+  rpc ListEquipmentTypes(ListEquipmentTypesRequest) returns (ListEquipmentTypesResponse);
+  rpc UpdateEquipmentType(UpdateEquipmentTypeRequest) returns (EquipmentType);
+  rpc DeleteEquipmentType(DeleteEquipmentTypeRequest) returns (DeleteEquipmentTypeResponse);
+
+  // Resolve equipment type from alert labels
+  rpc ResolveEquipmentType(ResolveEquipmentTypeRequest) returns (ResolveEquipmentTypeResponse);
+}
+
+message CreateEquipmentTypeRequest {
+  EquipmentType equipment_type = 1;
+}
+
+message GetEquipmentTypeRequest {
+  string id = 1;
+}
+
+message GetEquipmentTypeByNameRequest {
+  string name = 1;
+}
+
+message ListEquipmentTypesRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+
+  // Filters
+  string category = 3;    // network, compute, storage, security
+  string vendor = 4;
+  int32 criticality = 5;  // 1-5
+}
+
+message ListEquipmentTypesResponse {
+  repeated EquipmentType equipment_types = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+}
+
+message UpdateEquipmentTypeRequest {
+  EquipmentType equipment_type = 1;
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeleteEquipmentTypeRequest {
+  string id = 1;
+}
+
+message DeleteEquipmentTypeResponse {
+  bool success = 1;
+}
+
+message ResolveEquipmentTypeRequest {
+  // Labels from the alert to resolve equipment type from
+  map<string, string> labels = 1;
+}
+
+message ResolveEquipmentTypeResponse {
+  EquipmentType equipment_type = 1;
+  bool found = 2;
+  string resolution_method = 3;  // direct_label, device_type, job_pattern, hostname_prefix
+  string matched_value = 4;      // The value that matched
+}
